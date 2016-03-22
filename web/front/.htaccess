@@ -1,0 +1,4 @@
+Options +FollowSymLinks
+RewriteEngine On
+RewriteCond %{QUERY_STRING} !alias
+RewriteRule ^/?(.*)$ ?alias=$1 [QSA]

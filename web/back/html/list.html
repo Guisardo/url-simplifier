@@ -1,0 +1,187 @@
+<html><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/assets/bower_components/components-font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/assets/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css">
+  </head><body ng-app="urlshorter">
+    <div class="navbar navbar-default navbar-static-top" ng-controller="settings">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-ex-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{{settings.defaultUrl}}"><span>{{settings.brand}}</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-ex-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active">
+              <a href="/">Redirects</a>
+            </li>
+            <li>
+              <a href="/settings">Settings</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <h1 class="text-center">Url Simplifier</h1>
+          </div>
+        </div>
+        <div class="row" ng-controller="detail">
+          <div class="col-md-offset-3 col-md-6">
+            <form role="form" class="form-horizontal">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="url" class="form-control" placeholder="Full Destination" ng-required="true" ng-model="data.destination">
+                  <span class="input-group-btn">
+                    <button class="btn btn-success" ng-click="save()">Done</button>
+                  </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-2">
+                  <label for="alias" class="control-label">Alias</label>
+                </div>
+                <div class="col-sm-7">
+                  <input type="text" class="form-control" id="alias" placeholder="Alias (leave empty for a random)" ng-required="true" ng-disabled="!new" ng-model="data.alias">
+                </div>
+                <div class="col-sm-3">
+                  <div id="methods" class="btn-group">
+                    <a class="active btn btn-primary dropdown-toggle" data-toggle="dropdown"> <span id="selectedMethod">temporary</span> <span class="fa fa-caret-down"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li ng-click="setMethod('permanent')">Permanent (301)</li>
+                      <li ng-click="setMethod('temporary')">Temporary (302)</li>
+                      <li ng-click="setMethod('shareable')">Shareable</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group shareable">
+                <div class="col-sm-2">
+                  <label for="title" class="control-label">Title</label>
+                </div>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="title" placeholder="Title" ng-model="data.title">
+                </div>
+              </div>
+              <div class="form-group shareable">
+                <div class="col-sm-2">
+                  <label for="description" class="control-label">Description</label>
+                </div>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="description" placeholder="Description of your link" ng-model="data.description">
+                </div>
+              </div>
+              <div class="form-group shareable">
+                <div class="col-sm-2">
+                  <label for="image" class="control-label">Image</label>
+                </div>
+                <div class="col-sm-10">
+                  <input type="url" class="form-control" id="image" placeholder="Url for the image" ng-model="data.image">
+                </div>
+              </div>
+              <div class="form-group temporary shareable">
+                <div class="col-sm-2">
+                  <label for="expiration" class="control-label">Expiration</label>
+                </div>
+                <div class="col-sm-10">
+                  <input type="number" class="form-control" id="expiration" placeholder="Minutes until expiration" min="15" ng-model="data.expiration">
+                </div>
+              </div>
+              <div class="form-group permanent temporary shareable">
+                <div class="col-sm-2">
+                  <label for="username" class="control-label">Username</label>
+                </div>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="username" autocomplete="off" placeholder="Username if needed" ng-model="data.username">
+                </div>
+              </div>
+              <div class="form-group permanent temporary shareable">
+                <div class="col-sm-2">
+                  <label for="password" class="control-label">Password</label>
+                </div>
+                <div class="col-sm-10">
+                  <input type="password" class="form-control" id="password" autocomplete="off" placeholder="Password if needed" ng-model="data.password">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="container">
+        <div class="row" ng-controller="list">
+          <div class="col-md-12">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Alias</th>
+                  <th>Method</th>
+                  <th>Destination</th>
+                  <th>Uses</th>
+                  <th>Edit</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="redirect in redirects">
+                  <td>
+                    <a href="{{testDomain}}/{{redirect.alias}}" target="_blank">{{redirect.alias}}</a>
+                  </td>
+                  <td>{{redirect.method}}</td>
+                  <td>
+                    <a href="{{redirect.destination}}" target="_blank">{{redirect.destination}}</a>
+                  </td>
+                  <td>4</td>
+                  <td>
+                    <i class="fa fa-2x fa-fw fa-gear " data-alias="{{redirect.alias}}" ng-click="edit($event)"></i>
+                  </td>
+                  <td>
+                    <i ng-hide="!redirect.active" data-alias="{{redirect.alias}}" ng-click="delete($event)" class="ar fa fa-2x fa-eraser fa-fw text-warning "></i>
+                    <i ng-hide="redirect.active" data-alias="{{redirect.alias}}" ng-click="delete($event)" class="ar fa fa-2x fa-bomb fa-fw text-danger "></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <ul class="pagination ">
+              <li>
+                <a href="# ">Prev</a>
+              </li>
+              <li>
+                <a href="# ">1</a>
+              </li>
+              <li>
+                <a href="# ">2</a>
+              </li>
+              <li>
+                <a href="# ">3</a>
+              </li>
+              <li>
+                <a href="# ">4</a>
+              </li>
+              <li>
+                <a href="# ">5</a>
+              </li>
+              <li>
+                <a href="# ">Next</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="/assets/bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/assets/bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="/assets/js/ui.js"></script>
+
+
+</body></html>

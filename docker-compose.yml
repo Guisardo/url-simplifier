@@ -1,0 +1,37 @@
+data:
+  image: mongo
+  restart: always
+
+api:
+  build: web
+  restart: always
+  links:
+   - data:db
+  volumes:
+   - ./web/api:/var/www/html
+   - ./web/models:/var/www/html/models
+  ports:
+   - "8070:80"
+
+webfe:
+  build: web
+  restart: always
+  links:
+   - data:db
+   - api:api
+  volumes:
+   - ./web/front:/var/www/html
+   - ./web/models:/var/www/html/models
+  ports:
+   - "8071:80"
+
+webbe:
+  build: web
+  restart: always
+  links:
+   - api:api
+  volumes:
+   - ./web/back:/var/www/html
+  ports:
+   - "8077:80"
+

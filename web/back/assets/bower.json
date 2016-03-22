@@ -1,0 +1,12 @@
+{
+  "name": "url-shorter",
+  "version": "0.1",
+  "private": false,
+  "dependencies": {
+    "jquery": "*",
+    "components-font-awesome": "*",
+    "bootstrap": "*",
+    "angular": "*"
+  },
+  "devDependencies": {}
+}
