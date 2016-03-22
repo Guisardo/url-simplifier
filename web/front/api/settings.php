@@ -33,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD']==="PUT") {
     $rawInput = file_get_contents("php://input");
     $putData = json_decode($rawInput);
     $settings->setProperties($putData);
-    $settings->normalizePwd();
     $settings->save();
 } else if ($_SERVER['REQUEST_METHOD']==="GET") {
     echo json_encode($settings->data);

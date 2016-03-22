@@ -1,37 +1,27 @@
-data:
-  image: mongo
-  restart: always
+version: '2'
 
-api:
-  build: web
-  restart: always
-  links:
-   - data:db
-  volumes:
-   - ./web/api:/var/www/html
-   - ./web/models:/var/www/html/models
-  ports:
-   - "8070:80"
+services:
+  data:
+    image: mongo
+    restart: always
 
-webfe:
-  build: web
-  restart: always
-  links:
-   - data:db
-   - api:api
-  volumes:
-   - ./web/front:/var/www/html
-   - ./web/models:/var/www/html/models
-  ports:
-   - "8071:80"
+  webfe:
+    build: web/front
+    restart: always
+    links:
+     - data:db
+    volumes:
+     - ./web/front:/var/www/html
+    ports:
+     - "8071:80"
 
-webbe:
-  build: web
-  restart: always
-  links:
-   - api:api
-  volumes:
-   - ./web/back:/var/www/html
-  ports:
-   - "8077:80"
+  webbe:
+    build: web/back
+    restart: always
+    links:
+     - webfe:front
+    volumes:
+     - ./web/back:/var/www/html
+    ports:
+     - "8077:80"
 

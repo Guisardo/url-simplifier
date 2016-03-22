@@ -12,24 +12,11 @@ class Settings {
             if ($key != '_id') {
                 if (gettype($value) === 'object' && get_class($value) === 'MongoDB\BSON\UTCDateTime') {
                     $this->data->$key = (int)date($value);
-                } else if ($key === 'password') {
-                    $this->data->$key = md5($value.date('d M Y'));
                 } else {
                     $this->data->$key = $value;
                 }
             }
         }
-    }
-    public function normalizePwd () {
-        if ($this->data->password === '') {
-            $this->data->password = $this->old->password;
-        } else if ($this->data->password === md5(''.date('d M Y')) {
-            $this->data->password = '';
-        } else if ($this->data->password === '') {
-            $this->data->password = $this->old->password;
-        } else
-{}
-
     }
     public function getProperty ($property) {
         return $this->data->$property;

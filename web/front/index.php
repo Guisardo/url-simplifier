@@ -6,7 +6,7 @@ $dbname = 'db.redirects';
 // Connect to test database
 $manager = new MongoDB\Driver\Manager("mongodb://$dbhost");
 
-include_once ("models/Settings.class.php");
+include_once ("api/models/Settings.class.php");
 $settings = new Settings($manager, $dbname, 'global');
 $settings->load();
 
@@ -17,7 +17,7 @@ if (isset($_GET["alias"])) {
     $orgQuery = preg_replace('/alias=.+?(?:&|$)/', '', $orgQuery);
     $orgQuery = preg_replace('/^\?$/', '', $orgQuery);
 
-    include_once ("models/Redirect.class.php");
+    include_once ("api/models/Redirect.class.php");
     $redirect = new Redirect($manager, $dbname);
     $redirect->load($_GET["alias"]);
 
@@ -43,7 +43,7 @@ if (isset($_GET["alias"])) {
             "tid" => $settings->getProperty('analytics'),
             "cid" => $cid
         ]);
-    $url = 'http://api/redirect.php?hit=me&alias='.$redirect->getProperty("alias");
+    $url = 'http://localhost/api/redirect.php?hit=me&alias='.$redirect->getProperty("alias");
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -62,7 +62,13 @@ if (isset($_GET["alias"])) {
             ]);
     }
     $username = $redirect->getProperty('username');
+    if ($username === '') {
+        $username = null;
+    }
     $password = $redirect->getProperty('password');
+    if ($password === '') {
+        $password = null;
+    }
     if ($username !== null || $password !== null) {
         $realm = 'UrlShorter Realm';
         if (($username !== null && $username !== $_SERVER['PHP_AUTH_USER'])

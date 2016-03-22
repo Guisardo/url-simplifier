@@ -124,6 +124,7 @@ var detail = function($scope, $rootScope) {
         'success': function() {
           $scope.$apply(function() {
             $scope.new = true;
+            $scope.data = {};
             selectMethod('temporary');
             $rootScope.$broadcast('reloadlist');
           });

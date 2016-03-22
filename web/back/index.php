@@ -1,31 +1,11 @@
 <?php
-$url = 'http://api/settings.php?type=global';
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-$settings = json_decode(curl_exec($ch));
-curl_close($ch);
-
-$password = $settings->password;
-if ($password !== null) {
-    $realm = 'UrlShorter Realm';
-    if (('admin' !== $_SERVER['PHP_AUTH_USER'])
-        || ($password !== md5(''.date('d M Y')) && $password !== md5($_SERVER['PHP_AUTH_PW'].date('d M Y')))) {
-        header('WWW-Authenticate: Basic realm="'.$realm.'"');
-        header('HTTP/1.0 401 Unauthorized');
-        die ("Not authorized");
-        exit;
-    }
-}
-
-
 if (isset($_GET["alias"]) || isset($_GET["settings"])) {
     if (isset($_GET["settings"])) {
-        $url = 'http://api/settings.php?type='.$_GET["settings"];
+        $url = 'http://front/api/settings.php?type='.$_GET["settings"];
     } else if ($_GET["alias"] === "*") {
-        $url = 'http://api/redirect.php';
+        $url = 'http://front/api/redirect.php';
     } else {
-        $url = 'http://api/redirect.php?alias='.$_GET["alias"];
+        $url = 'http://front/api/redirect.php?alias='.$_GET["alias"];
     }
     // we are the parent
     $ch = curl_init();
