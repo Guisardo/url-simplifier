@@ -6,22 +6,18 @@ services:
     restart: always
 
   webfe:
-    build: web/front
+    image: lucardo/url-simplifier:front
     restart: always
     links:
      - data:db
-    volumes:
-     - ./web/front:/var/www/html
     ports:
      - "8071:80"
 
   webbe:
-    build: web/back
+    image: lucardo/url-simplifier:back
     restart: always
     links:
      - webfe:front
-    volumes:
-     - ./web/back:/var/www/html
     ports:
      - "8077:80"
 
