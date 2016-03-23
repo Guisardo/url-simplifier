@@ -47,10 +47,24 @@ if (isset($_GET["alias"])) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    include_once ("models/Settings.class.php");
+    $security = new Security($manager, $dbname, 'sec');
+    $security->load();
+    $username = $security->getProperty('username');
+    if ($username === null) {
+        $username = '';
+    }
+    $password = $security->getProperty('password');
+    if ($password === null) {
+        $password = '';
+    }
+    if ($username !== '' || $password !== '') {
+        curl_setopt($ch, CURLOPT_USERPWD, $username.":".md5($password.date('d M Y')));
+    }
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data_json)));
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
-    $data = curl_exec($ch);
+    curl_exec($ch);
     curl_close($ch);
 
 

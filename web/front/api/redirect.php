@@ -1,4 +1,32 @@
 <?php
+// Configuration
+$dbhost = 'db';
+$dbname = 'db.redirects';
+// Connect to test database
+$manager = new MongoDB\Driver\Manager("mongodb://$dbhost");
+
+include_once ("models/Settings.class.php");
+$security = new Settings($manager, $dbname, 'sec');
+$security->load();
+$username = $security->getProperty('username');
+if ($username === '') {
+    $username = null;
+}
+$password = $security->getProperty('password');
+if ($password === '') {
+    $password = null;
+}
+if ($username !== null || $password !== null) {
+    $realm = 'UrlShorter Realm';
+    if (($username !== null && $username !== $_SERVER['PHP_AUTH_USER'])
+        || ($password !== null && $password !== $_SERVER['PHP_AUTH_PW'])) {
+        header('WWW-Authenticate: Basic realm="'.$realm.'"');
+        header('HTTP/1.0 401 Unauthorized');
+        die ("Not authorized");
+        exit;
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] !== "GET") {
     // buffer all upcoming output
     ob_start();
@@ -17,13 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] !== "GET") {
     ob_flush();
     flush();
 }
-
-
-// Configuration
-$dbhost = 'db';
-$dbname = 'db.redirects';
-// Connect to test database
-$manager = new MongoDB\Driver\Manager("mongodb://$dbhost");
 
 if (isset($_GET["alias"])) {
     include_once ("models/Redirect.class.php");
