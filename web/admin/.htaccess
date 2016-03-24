@@ -1,0 +1,4 @@
+Options +FollowSymLinks
+RewriteEngine On
+RewriteRule settings/?$ /admin/index.php?html=settings [QSA]
+RewriteRule security/?$ /admin/index.php?html=security [QSA]

@@ -12,6 +12,8 @@ class Settings {
             if ($key != '_id') {
                 if (gettype($value) === 'object' && get_class($value) === 'MongoDB\BSON\UTCDateTime') {
                     $this->data->$key = (int)date($value);
+                } else if ($key == 'password' && $value !== $this->getProperty('password')) {
+                    $this->data->$key = $value;
                 } else {
                     $this->data->$key = $value;
                 }
@@ -19,7 +21,11 @@ class Settings {
         }
     }
     public function getProperty ($property) {
-        return $this->data->$property;
+        $result = $this->data->$property;
+        if ($property === 'password' && $result !== '' && $result !== null) {
+            return md5($result.date('d M Y'));
+        }
+        return $result;
     }
     public function load () {
         $q_currentredirect = new MongoDB\Driver\Query(["type" => $this->getProperty('type')]);

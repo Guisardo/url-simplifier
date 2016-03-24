@@ -1,3 +1,0 @@
-Options +FollowSymLinks
-RewriteEngine On
-RewriteRule ^settings/?$ /index.php?html=settings [QSA]

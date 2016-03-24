@@ -1,5 +1,6 @@
 Options +FollowSymLinks
 RewriteEngine On
+RewriteRule ^admin/ - [L,NC]
 RewriteRule ^api/ - [L,NC]
 
 RewriteCond %{QUERY_STRING} !alias
