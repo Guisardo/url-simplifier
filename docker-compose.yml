@@ -6,22 +6,11 @@ services:
     restart: always
 
   webfe:
-    build: web/front
+    build: web
     restart: always
     links:
      - data:db
     volumes:
-     - ./web/front:/var/www/html
+     - ./web:/var/www/html
     ports:
      - "8071:80"
-
-  webbe:
-    build: web/back
-    restart: always
-    links:
-     - webfe:front
-    volumes:
-     - ./web/back:/var/www/html
-    ports:
-     - "8077:80"
-

@@ -12,7 +12,9 @@ class Settings {
             if ($key != '_id') {
                 if (gettype($value) === 'object' && get_class($value) === 'MongoDB\BSON\UTCDateTime') {
                     $this->data->$key = (int)date($value);
-                } else if ($key === 'password' && $value !== $this->getProperty('password')) {
+                } else if ($key == 'password' && $value !== $this->getProperty('password')) {
+                    $this->data->$key = $value;
+                } else {
                     $this->data->$key = $value;
                 }
             }

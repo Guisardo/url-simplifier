@@ -1,7 +1,7 @@
 <?php
 // we are the parent
 $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, 'http://front/api/redirect.php');
+curl_setopt($ch, CURLOPT_URL, 'http://localhost/api/redirect.php');
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 curl_setopt($ch, CURLOPT_HEADER, true);    // we want headers
 $username = $_SERVER['PHP_AUTH_USER'];
@@ -32,11 +32,11 @@ if(strpos($data_header, 'Not authorized') !== false) {
 
 if (isset($_GET["alias"]) || isset($_GET["settings"])) {
     if (isset($_GET["settings"])) {
-        $url = 'http://front/api/settings.php?type='.$_GET["settings"];
+        $url = 'http://localhost/api/settings.php?type='.$_GET["settings"];
     } else if ($_GET["alias"] === "*") {
-        $url = 'http://front/api/redirect.php';
+        $url = 'http://localhost/api/redirect.php';
     } else {
-        $url = 'http://front/api/redirect.php?alias='.$_GET["alias"];
+        $url = 'http://localhost/api/redirect.php?alias='.$_GET["alias"];
     }
     // we are the parent
     $ch = curl_init();

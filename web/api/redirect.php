@@ -17,7 +17,7 @@ if ($password === '') {
     $password = null;
 }
 if ($username !== null || $password !== null) {
-    $realm = 'UrlShorter Realm';
+    $realm = 'UrlShorter Realm API';
     if (($username !== null && $username !== $_SERVER['PHP_AUTH_USER'])
         || ($password !== null && $password !== $_SERVER['PHP_AUTH_PW'])) {
         header('WWW-Authenticate: Basic realm="'.$realm.'"');
