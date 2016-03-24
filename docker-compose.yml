@@ -5,19 +5,10 @@ services:
     image: mongo
     restart: always
 
-  webfe:
-    image: lucardo/url-simplifier:front
+  web:
+    image: lucardo/url-simplifier
     restart: always
     links:
      - data:db
     ports:
      - "8071:80"
-
-  webbe:
-    image: lucardo/url-simplifier:back
-    restart: always
-    links:
-     - webfe:front
-    ports:
-     - "8077:80"
-

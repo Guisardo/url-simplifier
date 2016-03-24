@@ -31,7 +31,7 @@ var aliasExists = function(alias) {
     result = true;
   } else {
     $.ajax({
-      'url': '/?alias=' + alias,
+      'url': '/admin/?alias=' + alias,
       'async': false,
       'success': function(data) {
         if (data.alias == alias) {
@@ -71,13 +71,38 @@ var validateDetail = function(data, isNew) {
   return result;
 };
 
+var security = function($scope, $rootScope) {
+  $scope.security = {};
+  $.ajax({
+    'url': '/admin/?settings=sec',
+    'success': function(data) {
+      $scope.$apply(function() {
+        $scope.security.username = data.username;
+      });
+    }
+  });
+  $scope.save = function() {
+    if ($scope.security.password === $scope.security.pwdConfirm) {
+      delete $scope.security.pwdConfirm;
+      $.ajax({
+        'url': '/admin/?settings=sec',
+        'method': 'PUT',
+        'data': JSON.stringify($scope.security),
+        'success': function() {
+
+        }
+      });
+    }
+  };
+};
+
 var settings = function($scope, $rootScope) {
   $scope.settings = {};
   $scope.settings.brand = 'Url Simplifier';
   $scope.settings.defaultUrl = '/';
   $scope.settings.testDomain = '';
   $.ajax({
-    'url': '/?settings=global',
+    'url': '/admin/?settings=global',
     'success': function(data) {
       $scope.$apply(function() {
         $scope.settings = $.extend({}, $scope.settings, data);
@@ -87,7 +112,7 @@ var settings = function($scope, $rootScope) {
   });
   $scope.save = function() {
     $.ajax({
-      'url': '/?settings=global',
+      'url': '/admin/?settings=global',
       'method': 'PUT',
       'data': JSON.stringify($scope.settings),
       'success': function() {
@@ -118,7 +143,7 @@ var detail = function($scope, $rootScope) {
     if (validateDetail($scope.data, $scope.new)) {
       $scope.data.active = true;
       $.ajax({
-        'url': '/?alias=' + $scope.data.alias,
+        'url': '/admin/?alias=' + $scope.data.alias,
         'method': 'PUT',
         'data': JSON.stringify($scope.data),
         'success': function() {
@@ -138,7 +163,7 @@ var detail = function($scope, $rootScope) {
   };
   $scope.$on('loaddetail', function(response, alias) {
     $.ajax({
-      'url': '/?alias=' + alias,
+      'url': '/admin/?alias=' + alias,
       'success': function(data) {
         $scope.$apply(function() {
           $scope.new = false;
@@ -150,7 +175,7 @@ var detail = function($scope, $rootScope) {
   });
   $scope.$on('deletedetail', function(response, alias) {
     $.ajax({
-      'url': '/?alias=' + alias,
+      'url': '/admin/?alias=' + alias,
       'method': 'DELETE',
       'success': function(data) {
         $scope.$apply(function() {
@@ -166,7 +191,7 @@ var list = function($scope, $rootScope) {
 
   $scope.updateList = function() {
     $.ajax({
-      'url': '/?alias=*',
+      'url': '/admin/?alias=*',
       'success': function(redirects) {
         $scope.$apply(function() {
           $scope.redirects = redirects;
@@ -192,6 +217,7 @@ var list = function($scope, $rootScope) {
 };
 
 angular.module('urlshorter', [])
+    .controller('security', security)
     .controller('settings', settings)
     .controller('detail', detail)
     .controller('list', list);
