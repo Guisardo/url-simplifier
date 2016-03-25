@@ -1,4 +1,5 @@
 <?php
+include_once ("Settings.class.php");
 
 class Redirect {
     public function __construct ( $manager, $dbname ) {
@@ -7,6 +8,15 @@ class Redirect {
         $this->data = new stdClass();
         $this->data->created = gmmktime();
         $this->data->active = true;
+        $settings = new Settings($manager, $dbname, 'global');
+        $settings->load();
+        $this->setProperties([
+            "method" => "shareable",
+            "title" => $settings->getProperty('title'),
+            "description" => $settings->getProperty('description'),
+            "image" => $settings->getProperty('image'),
+            "destination" => $settings->getProperty('defaultUrl')
+            ]);
     }
     public function setProperties ($properties) {
         foreach ($properties as $key => $value) {
@@ -20,6 +30,10 @@ class Redirect {
         }
     }
     public function getProperty ($property) {
+        $result = $this->data->$property;
+        if ($result === null) {
+            $result = '';
+        }
         return $this->data->$property;
     }
     public function isNew() {

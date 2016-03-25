@@ -71,7 +71,7 @@ var validateDetail = function(data, isNew) {
   return result;
 };
 
-var security = function($scope, $rootScope) {
+var security = function($scope, $rootScope, $notification) {
   $scope.security = {};
   $.ajax({
     'url': '/admin/?settings=sec',
@@ -89,14 +89,16 @@ var security = function($scope, $rootScope) {
         'method': 'PUT',
         'data': JSON.stringify($scope.security),
         'success': function() {
-
+          $notification('Configuration saved', {
+                                              delay: 10000
+                                          });
         }
       });
     }
   };
 };
 
-var settings = function($scope, $rootScope) {
+var settings = function($scope, $rootScope, $notification) {
   $scope.settings = {};
   $scope.settings.brand = 'Url Simplifier';
   $scope.settings.defaultUrl = '/';
@@ -116,13 +118,15 @@ var settings = function($scope, $rootScope) {
       'method': 'PUT',
       'data': JSON.stringify($scope.settings),
       'success': function() {
-
+        $notification('Settings saved', {
+                                            delay: 10000
+                                        });
       }
     });
   };
 };
 
-var detail = function($scope, $rootScope) {
+var detail = function($scope, $rootScope, $notification) {
   $scope.new = true;
   $scope.data = {
     'method': 'temporary',
@@ -152,6 +156,9 @@ var detail = function($scope, $rootScope) {
             $scope.data = {};
             selectMethod('temporary');
             $rootScope.$broadcast('reloadlist');
+            $notification('Redirect saved', {
+                                                delay: 10000
+                                            });
           });
         }
       });
@@ -180,13 +187,16 @@ var detail = function($scope, $rootScope) {
       'success': function(data) {
         $scope.$apply(function() {
           $rootScope.$broadcast('reloadlist');
+          $notification('Redirect ' + data, {
+                                              delay: 10000
+                                          });
         });
       }
     });
   });
 };
 
-var list = function($scope, $rootScope) {
+var list = function($scope, $rootScope, $notification) {
   $scope.redirects = [];
 
   $scope.updateList = function() {
@@ -216,7 +226,7 @@ var list = function($scope, $rootScope) {
   };
 };
 
-angular.module('urlshorter', [])
+angular.module('urlshorter', ['notification'])
     .controller('security', security)
     .controller('settings', settings)
     .controller('detail', detail)

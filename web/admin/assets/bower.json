@@ -6,7 +6,8 @@
     "jquery": "*",
     "components-font-awesome": "*",
     "bootstrap": "*",
-    "angular": "*"
+    "angular": "*",
+    "angular-notification": "*"
   },
   "devDependencies": {}
 }
