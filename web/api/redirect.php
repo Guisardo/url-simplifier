@@ -27,7 +27,8 @@ if ($username !== null || $password !== null) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== "GET") {
+if ($_SERVER['REQUEST_METHOD'] !== "GET" && $_SERVER['REQUEST_METHOD'] !== "DELETE") {
+    ignore_user_abort(true);
     // buffer all upcoming output
     ob_start();
 
@@ -63,6 +64,11 @@ if ($_SERVER['REQUEST_METHOD'] === "PUT") {
     }
 } else if ($_SERVER['REQUEST_METHOD'] === "DELETE") {
     if (isset($redirect)) {
+        if ($redirect->getProperty('active')) {
+            echo json_encode("deactivated");
+        } else {
+            echo json_encode("removed");
+        }
         $redirect->remove();
     }
 } else if ($_SERVER['REQUEST_METHOD'] === "GET") {
