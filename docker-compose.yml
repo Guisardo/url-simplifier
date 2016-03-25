@@ -5,12 +5,10 @@ services:
     image: mongo
     restart: always
 
-  webfe:
-    build: web
+  web:
+    image: lucardo/url-simplifier
     restart: always
     links:
      - data:db
-    volumes:
-     - ./web:/var/www/html
     ports:
      - "8071:80"
