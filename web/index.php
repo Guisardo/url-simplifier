@@ -47,9 +47,6 @@ $data_json = json_encode([
         "cid" => $cid
     ]);
 $url = 'http://localhost/api/redirect.php?hit=me&alias='.$redirect->getProperty("alias");
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 $security = new Settings($manager, $dbname, 'sec');
 $security->load();
 $username = $security->getProperty('username');
@@ -60,8 +57,12 @@ $password = $security->getProperty('password');
 if ($password === null) {
     $password = '';
 }
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_VERBOSE, true);
 if ($username !== '' || $password !== '') {
-    curl_setopt($ch, CURLOPT_USERPWD, $username.":".md5($password.date('d M Y')));
+    curl_setopt($ch, CURLOPT_USERPWD, $username.":".$password);
 }
 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'Content-Length: ' . strlen($data_json)));
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');

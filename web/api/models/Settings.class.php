@@ -23,7 +23,7 @@ class Settings {
     public function getProperty ($property) {
         $result = $this->data->$property;
         if ($property === 'password' && $result !== '' && $result !== null) {
-            return md5($result.date('d M Y'));
+            return md5(trim(strtolower($result.date('d M Y'))));
         }
         return $result;
     }

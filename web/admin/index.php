@@ -15,7 +15,7 @@ if ($password === null) {
 if ($username !== '' || $password !== '') {
     curl_setopt($ch, CURLOPT_VERBOSE, true);
     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-    curl_setopt($ch, CURLOPT_USERPWD, $username.":".md5($password.date('d M Y')));
+    curl_setopt($ch, CURLOPT_USERPWD, $username.":".md5(trim(strtolower($password.date('d M Y')))));
 }
 $data = curl_exec($ch);
 $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -54,7 +54,7 @@ if (isset($_GET["alias"]) || isset($_GET["settings"])) {
     if ($username !== '' || $password !== '') {
         curl_setopt($ch, CURLOPT_VERBOSE, true);
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($ch, CURLOPT_USERPWD, $username.":".md5($password.date('d M Y')));
+        curl_setopt($ch, CURLOPT_USERPWD, $username.":".md5(trim(strtolower($password.date('d M Y')))));
     }
     if ($_SERVER['REQUEST_METHOD'] === "PUT") {
         $data_json = file_get_contents("php://input");
