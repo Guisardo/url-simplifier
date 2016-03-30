@@ -98,32 +98,30 @@ class Redirect {
 
     public function hit($data) {
         $result = false;
-        if (!$this->isNew()) {
-            // Create a bulk write object and add our insert operation
-            $bulk = new MongoDB\Driver\BulkWrite;
-            $bulk->insert([
-                "alias" => $this->getProperty('alias'),
-                "t" => new MongoDB\BSON\UTCDateTime($_SERVER["REQUEST_TIME"]),
-                "data" => $data
-                ]);
+        // Create a bulk write object and add our insert operation
+        $bulk = new MongoDB\Driver\BulkWrite;
+        $bulk->insert([
+            "alias" => $this->getProperty('alias'),
+            "t" => new MongoDB\BSON\UTCDateTime($_SERVER["REQUEST_TIME"]),
+            "data" => $data
+            ]);
 
-            try {
-                /* Specify the full namespace as the first argument, followed by the bulk
-                 * write object and an optional write concern. MongoDB\Driver\WriteResult is
-                 * returned on success; otherwise, an exception is thrown. */
-                $result = $this->manager->executeBulkWrite($this->dbname.".hits", $bulk);
-            } catch (MongoDB\Driver\Exception\Exception $e) {
-                $result = $e;
-            }
+        try {
+            /* Specify the full namespace as the first argument, followed by the bulk
+             * write object and an optional write concern. MongoDB\Driver\WriteResult is
+             * returned on success; otherwise, an exception is thrown. */
+            $result = $this->manager->executeBulkWrite($this->dbname.".hits", $bulk);
+        } catch (MongoDB\Driver\Exception\Exception $e) {
+            $result = $e;
+        }
 
-            if ($data->tid !== null) {
-                $url = 'https://www.google-analytics.com/collect?v=1&tid='.urlencode($data->tid).'&ds=web&z='.time().'&cid='.urlencode($data->cid).'&uip='.urlencode($data->ip).'&ua='.urlencode($data->ua).'&dr='.urlencode($data->ref).'&ul='.urlencode($data->lang).'&t=pageview&dl='.urlencode($data->dl);
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-                $data = curl_exec($ch);
-                curl_close($ch);
-            }
+        if ($data->tid !== null) {
+            $url = 'https://www.google-analytics.com/collect?v=1&tid='.urlencode($data->tid).'&ds=web&z='.time().'&cid='.urlencode($data->cid).'&uip='.urlencode($data->ip).'&ua='.urlencode($data->ua).'&dr='.urlencode($data->ref).'&ul='.urlencode($data->lang).'&t=pageview&dl='.urlencode($data->dl);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            $data = curl_exec($ch);
+            curl_close($ch);
         }
         return $result;
     }
