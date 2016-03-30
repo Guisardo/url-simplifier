@@ -33,6 +33,15 @@ $currProtocol = 'http://';
 if (isset($_SERVER['HTTPS'])) {
     $currProtocol = 'https://';
 }
+$ip=$_SERVER['REMOTE_ADDR'];
+if (isset($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
+{
+  $ip=$_SERVER['HTTP_CLIENT_IP'];
+}
+if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
+{
+  $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+}
 $data_json = json_encode([
         "qs" => $_SERVER["QUERY_STRING"],
         "charset" => $_SERVER["HTTP_ACCEPT_CHARSET"],
@@ -40,7 +49,7 @@ $data_json = json_encode([
         "lang" => $_SERVER["HTTP_ACCEPT_LANGUAGE"],
         "ref" => $_SERVER["HTTP_REFERER"],
         "ua" => $_SERVER["HTTP_USER_AGENT"],
-        "ip" => $_SERVER["REMOTE_ADDR"],
+        "ip" => $ip,
         "usr" => $_SERVER["PHP_AUTH_USER"],
         "dl" => $currProtocol.$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"],
         "tid" => $settings->getProperty('analytics'),
