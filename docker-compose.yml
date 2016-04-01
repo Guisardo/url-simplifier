@@ -1,15 +1,15 @@
 version: '2'
 
 services:
-  data:
+  mongodb:
     image: mongo
     restart: always
 
   web:
-    build: .
+    build: web
     restart: always
     links:
-     - data:db
+     - mongodb:mongodb
     ports:
      - "8072:80"
     volumes:
