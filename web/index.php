@@ -1,5 +1,6 @@
 <?php
 
+ini_set("display_errors", false);
 include_once("api/models/Settings.class.php");
 $isConnected = false;
 try {
