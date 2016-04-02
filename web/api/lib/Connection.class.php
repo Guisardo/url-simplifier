@@ -23,7 +23,7 @@ class Connection
     public static function getManager()
     {
         if (null === static::$manager) {
-            static::$manager = new \MongoDB\Driver\Manager("mongodb://".$_ENV["MONGO_HOSTNAME"]);
+            static::$manager = new \MongoDB\Driver\Manager("mongodb://".$_ENV["MONGO_HOSTNAME"].":".$_ENV["MONGO_HOSTPORT"]);
         }
 
         return static::$manager;

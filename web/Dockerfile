@@ -19,3 +19,4 @@ COPY . /var/www/html/
 WORKDIR /var/www/html
 
 ENV MONGO_HOSTNAME mongodb
+ENV MONGO_HOSTPORT 27017
