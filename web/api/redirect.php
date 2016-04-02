@@ -37,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === "PUT") {
     } else {
         $redirect->setProperties($putData);
         $redirect->save();
+        echo json_encode("ACK");
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === "DELETE") {
     if (isset($redirect)) {
