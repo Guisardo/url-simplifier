@@ -6,11 +6,9 @@ services:
     restart: always
 
   web:
-    build: web
+    image: lucardo/url-simplifier
     restart: always
     links:
      - mongodb:mongodb
     ports:
-     - "8072:80"
-    volumes:
-     - "./web:/var/www/html"
+     - "80:80"
