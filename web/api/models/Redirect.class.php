@@ -1,13 +1,16 @@
 <?php
-include_once ("Settings.class.php");
+namespace Api\Models;
 
-class Redirect {
-    public function __construct ( $manager, $dbname ) {
+class Redirect
+{
+    public function __construct($manager, $dbname)
+    {
         $this->manager = $manager;
         $this->dbname = $dbname;
         $this->data = new stdClass();
         $this->data->created = gmmktime();
         $this->data->active = true;
+        include_once("Settings.class.php");
         $settings = new Settings($manager, $dbname, 'global');
         $settings->load();
         $this->setProperties([
@@ -18,7 +21,8 @@ class Redirect {
             "destination" => $settings->getProperty('defaultUrl')
             ]);
     }
-    public function setProperties ($properties) {
+    public function setProperties($properties)
+    {
         foreach ($properties as $key => $value) {
             if ($key != '_id') {
                 if (gettype($value) === 'object' && get_class($value) === 'MongoDB\BSON\UTCDateTime') {
@@ -29,28 +33,33 @@ class Redirect {
             }
         }
     }
-    public function getProperty ($property) {
+    public function getProperty($property)
+    {
         $result = $this->data->$property;
         if ($result === null) {
             $result = '';
         }
         return $this->data->$property;
     }
-    public function isNew() {
+    public function isNew()
+    {
         return $this->new;
     }
-    public function isExpired() {
+    public function isExpired()
+    {
         if (!$this->getProperty('active')) {
             $this->expired = true;
-        } else if (!isset($this->expired)) {
+        } elseif (!isset($this->expired)) {
             $this->expired = false;
             if ($this->getProperty('method') !== 'permanent' && $this->getProperty('expiration') !== null) {
-                $this->expired = (gmmktime() - $this->getProperty('modified')) >= ($this->getProperty('expiration') * 60000);
+                $this->expired =
+                        (gmmktime() - $this->getProperty('modified')) >= ($this->getProperty('expiration') * 60000);
             }
         }
         return $this->expired;
     }
-    public function load ($alias) {
+    public function load($alias)
+    {
         $this->new = true;
         $q_currentredirect = new MongoDB\Driver\Query(["alias" => $alias]);
         $cursor = $this->manager->executeQuery($this->dbname.".redirects", $q_currentredirect);
@@ -62,7 +71,8 @@ class Redirect {
             $this->setProperties($this->old);
         }
     }
-    public function save() {
+    public function save()
+    {
         $result = false;
         $this->data->created = new MongoDB\BSON\UTCDateTime($this->getProperty('created'));
         $this->data->modified = new MongoDB\BSON\UTCDateTime(gmmktime());
@@ -96,7 +106,8 @@ class Redirect {
         return $result;
     }
 
-    public function hit($data) {
+    public function hit($data)
+    {
         $result = false;
         // Create a bulk write object and add our insert operation
         $bulk = new MongoDB\Driver\BulkWrite;
@@ -116,20 +127,22 @@ class Redirect {
         }
 
         if ($data->tid !== null) {
-            $url = 'https://www.google-analytics.com/collect?v=1&tid='.urlencode($data->tid).'&ds=web&z='.time().'&cid='.urlencode($data->cid).'&uip='.urlencode($data->ip).'&ua='.urlencode($data->ua).'&dr='.urlencode($data->ref).'&ul='.urlencode($data->lang).'&t=pageview&dl='.urlencode($data->dl);
+            $url = 'https://www.google-analytics.com/collect?v=1&tid='.
+                    urlencode($data->tid).'&ds=web&z='.time().'&cid='.urlencode($data->cid).
+                    '&uip='.urlencode($data->ip).'&ua='.urlencode($data->ua).
+                    '&dr='.urlencode($data->ref).'&ul='.urlencode($data->lang).
+                    '&t=pageview&dl='.urlencode($data->dl);
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_VERBOSE, true);
             $data = curl_exec($ch);
             curl_close($ch);
         }
         return $result;
     }
-    public function getHits() {
-
-    }
-    public function remove() {
+    public function remove()
+    {
         $result = false;
         if (!$this->isNew()) {
             if ($this->getProperty('active')) {

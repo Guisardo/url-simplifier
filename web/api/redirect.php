@@ -5,8 +5,8 @@ $dbname = 'db.redirects';
 // Connect to test database
 $manager = new MongoDB\Driver\Manager("mongodb://$dbhost");
 
-include_once ("models/Settings.class.php");
-$security = new Settings($manager, $dbname, 'sec');
+include_once("models/Settings.class.php");
+$security = new Api\Models\Settings($manager, $dbname, 'sec');
 $security->load();
 $username = $security->getProperty('username');
 if ($username === '') {
@@ -22,7 +22,7 @@ if ($username !== null || $password !== null) {
         || ($password !== null && $password !== $_SERVER['PHP_AUTH_PW'])) {
         header('WWW-Authenticate: Basic realm="'.$realm.'"');
         header('HTTP/1.0 401 Unauthorized');
-        die ("Not authorized");
+        die("Not authorized");
         exit;
     }
 }
@@ -48,21 +48,21 @@ if ($_SERVER['REQUEST_METHOD'] !== "GET" && $_SERVER['REQUEST_METHOD'] !== "DELE
 }
 
 if (isset($_GET["alias"])) {
-    include_once ("models/Redirect.class.php");
-    $redirect = new Redirect($manager, $dbname);
+    include_once("models/Redirect.class.php");
+    $redirect = new Api\Models\Redirect($manager, $dbname);
     $redirect->load($_GET["alias"]);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === "PUT") {
     $rawInput = file_get_contents("php://input");
     $putData = json_decode($rawInput);
-    if(isset($_GET["hit"])) {
+    if (isset($_GET["hit"])) {
         $redirect->hit($putData);
     } else {
         $redirect->setProperties($putData);
         $redirect->save();
     }
-} else if ($_SERVER['REQUEST_METHOD'] === "DELETE") {
+} elseif ($_SERVER['REQUEST_METHOD'] === "DELETE") {
     if (isset($redirect)) {
         if ($redirect->getProperty('active')) {
             echo json_encode("deactivated");
@@ -71,10 +71,10 @@ if ($_SERVER['REQUEST_METHOD'] === "PUT") {
         }
         $redirect->remove();
     }
-} else if ($_SERVER['REQUEST_METHOD'] === "GET") {
+} elseif ($_SERVER['REQUEST_METHOD'] === "GET") {
     if (!isset($redirect)) {
-        include_once ("models/RedirectCollection.class.php");
-        $redirects = new RedirectCollection($manager, $dbname);
+        include_once("models/RedirectCollection.class.php");
+        $redirects = new Api\Models\RedirectCollection($manager, $dbname);
         $redirects->load();
         echo json_encode($redirects->getList());
     } else {

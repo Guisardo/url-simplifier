@@ -1,18 +1,22 @@
 <?php
+namespace Api\Models;
 
-class Settings {
-    public function __construct ( $manager, $dbname, $type ) {
+class Settings
+{
+    public function __construct($manager, $dbname, $type)
+    {
         $this->manager = $manager;
         $this->dbname = $dbname;
         $this->data = new stdClass();
         $this->data->type = $type;
     }
-    public function setProperties ($properties) {
+    public function setProperties($properties)
+    {
         foreach ($properties as $key => $value) {
             if ($key != '_id') {
                 if (gettype($value) === 'object' && get_class($value) === 'MongoDB\BSON\UTCDateTime') {
                     $this->data->$key = (int)date($value);
-                } else if ($key == 'password' && $value !== $this->getProperty('password')) {
+                } elseif ($key == 'password' && $value !== $this->getProperty('password')) {
                     $this->data->$key = $value;
                 } else {
                     $this->data->$key = $value;
@@ -20,14 +24,16 @@ class Settings {
             }
         }
     }
-    public function getProperty ($property) {
+    public function getProperty($property)
+    {
         $result = $this->data->$property;
         if ($property === 'password' && $result !== '' && $result !== null) {
             return md5(trim(strtolower($result.date('d M Y'))));
         }
         return $result;
     }
-    public function load () {
+    public function load()
+    {
         $q_currentredirect = new MongoDB\Driver\Query(["type" => $this->getProperty('type')]);
         $cursor = $this->manager->executeQuery($this->dbname.".settings", $q_currentredirect);
         // Iterate over all matched documents
@@ -38,7 +44,8 @@ class Settings {
         }
 
     }
-    public function save() {
+    public function save()
+    {
         $result = false;
         $this->data->modified = new MongoDB\BSON\UTCDateTime(gmmktime());
         // Specify the search criteria and update operations (or replacement document)
