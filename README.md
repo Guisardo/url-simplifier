@@ -30,6 +30,7 @@ This system only requires a connection to a MongoDB database and a server with P
 But there are some thing to considere it you need a custom installation:
 * The system relies on a few rewrites. Currently those rewrites are managed by the /web/.htaccess and /web/admin/.htaccess files. If your server doen't support .htaccess files, you will have to convert the rewrites to the ones that your server supports. It will help a lot if you could make the pull request with the conversions.
 * The system reads the hostname and the port of the MongoDB from the environment variables **MONGO_HOSTNAME** and **MONGO_HOSTPORT**.
+* NOT all of the files are in this repository. You will need to use [Bower](http://bower.io/) inside */web/admin/assets* to obtain the extra components required for the control panel to work.
 
 ## Usage
 The control panel is accesible using */admin*.
