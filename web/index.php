@@ -1,46 +1,38 @@
 <?php
 
-// Configuration
-$dbhost = $_ENV["MONGO_HOSTNAME"];
-$dbname = 'db.redirects';
-// Connect to test database
-$manager = new MongoDB\Driver\Manager("mongodb://$dbhost");
-
-include_once ("api/models/Settings.class.php");
-$settings = new Settings($manager, $dbname, 'global');
+include_once("api/models/Settings.class.php");
+$settings = new Api\Models\Settings('global');
 $settings->load();
 
 $defaultUrl = $settings->getProperty('defaultUrl');
-
-include_once ("api/models/Redirect.class.php");
-if (!isset($_GET["alias"]) || $_GET["alias"] === '') {
-    $redirect = new Redirect($manager, $dbname);
-}
 
 $orgQuery = '?'.$_SERVER['QUERY_STRING'];
 $orgQuery = preg_replace('/alias=.*?(?:&|$)/', '', $orgQuery);
 $orgQuery = preg_replace('/^\?$/', '', $orgQuery);
 
-$redirect = new Redirect($manager, $dbname);
-$redirect->load($_GET["alias"]);
+include_once("api/models/Redirect.class.php");
+$redirect = new Api\Models\Redirect();
+if (isset($_GET["alias"]) && $_GET["alias"] !== '') {
+    $redirect->load($_GET["alias"]);
+}
 
 $cid = $_COOKIE["cid"];
-if($cid === null) {
+if ($cid === null) {
     $cid = rand(0, 2147483647);
-    setcookie("cid",$cid,time()+(86400*31*12));
+    setcookie("cid", $cid, time() + (86400 * 31 * 12));
 }
 $currProtocol = 'http://';
 if (isset($_SERVER['HTTPS'])) {
     $currProtocol = 'https://';
 }
-$ip=$_SERVER['REMOTE_ADDR'];
-if (isset($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
-{
-  $ip=$_SERVER['HTTP_CLIENT_IP'];
+$ip = $_SERVER['REMOTE_ADDR'];
+//check ip from share internet
+if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+    $ip = $_SERVER['HTTP_CLIENT_IP'];
 }
-if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
-{
-  $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+//to check ip is pass from proxy
+if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+    $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
 }
 $data_json = json_encode([
         "qs" => $_SERVER["QUERY_STRING"],
@@ -56,7 +48,7 @@ $data_json = json_encode([
         "cid" => $cid
     ]);
 $url = 'http://localhost/api/redirect.php?hit=me&alias='.$redirect->getProperty("alias");
-$security = new Settings($manager, $dbname, 'sec');
+$security = new Api\Models\Settings('sec');
 $security->load();
 $username = $security->getProperty('username');
 if ($username === null) {
@@ -68,7 +60,7 @@ if ($password === null) {
 }
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_VERBOSE, true);
 if ($username !== '' || $password !== '') {
     curl_setopt($ch, CURLOPT_USERPWD, $username.":".$password);
@@ -80,7 +72,7 @@ curl_exec($ch);
 curl_close($ch);
 
 if ($redirect->isNew() || $redirect->isExpired()) {
-    $redirect = new Redirect($manager, $dbname);
+    $redirect = new Api\Models\Redirect();
 }
 if ($redirect->getProperty('method') === 'shareable') {
     $template = file_get_contents('html/shareable.html');
@@ -95,7 +87,8 @@ if ($redirect->getProperty('method') === 'shareable') {
   location.href = "'.$redirect->getProperty('destination').'";
 </script>';
     }
-    $template = str_replace(array(
+    $template = str_replace(
+        array(
             '{{title}}',
             '{{description}}',
             '{{image}}',
@@ -113,32 +106,20 @@ if ($redirect->getProperty('method') === 'shareable') {
             $metaRedirect,
             $extraTags
         ),
-        $template);
+        $template
+    );
     echo $template;
 } else {
     $username = $redirect->getProperty('username');
-    if ($username === '') {
-        $username = null;
-    }
     $password = $redirect->getProperty('password');
-    if ($password === '') {
-        $password = null;
-    }
-    if ($username !== null || $password !== null) {
-        $realm = 'UrlShorter Realm';
-        if (($username !== null && $username !== $_SERVER['PHP_AUTH_USER'])
-            || ($password !== null && $password !== $_SERVER['PHP_AUTH_PW'])) {
-            header('WWW-Authenticate: Basic realm="'.$realm.'"');
-            header('HTTP/1.0 401 Unauthorized');
-            die ("Not authorized");
-            exit;
-        }
-    }
+    include_once("api/lib/Security.class.php");
+    \Api\Lib\Security::httpBasicAuth($username, $password);
+
     if ($redirect->getProperty('method') === 'permanent') {
-        header( "HTTP/1.1 301 Moved Permanently" );
-    } else if ($redirect->getProperty('method') === 'temporary') {
-        header( "HTTP/1.1 302 Moved Temporary" );
+        header("HTTP/1.1 301 Moved Permanently");
+    } elseif ($redirect->getProperty('method') === 'temporary') {
+        header("HTTP/1.1 302 Moved Temporary");
     }
-    header( "Location: ".$redirect->data->destination.$orgQuery );
+    header("Location: ".$redirect->data->destination.$orgQuery);
     //var_dump($redirect->getProperty('destination').$orgQuery);
 }

@@ -1,33 +1,9 @@
 <?php
-// Configuration
-$dbhost = $_ENV["MONGO_HOSTNAME"];
-$dbname = 'db.redirects';
-// Connect to test database
-$manager = new MongoDB\Driver\Manager("mongodb://$dbhost");
 
-include_once ("models/Settings.class.php");
-$security = new Settings($manager, $dbname, 'sec');
-$security->load();
-$username = $security->getProperty('username');
-if ($username === '') {
-    $username = null;
-}
-$password = $security->getProperty('password');
-if ($password === '') {
-    $password = null;
-}
-if ($username !== null || $password !== null) {
-    $realm = 'UrlShorter Realm API';
-    if (($username !== null && $username !== $_SERVER['PHP_AUTH_USER'])
-        || ($password !== null && $password !== $_SERVER['PHP_AUTH_PW'])) {
-        header('WWW-Authenticate: Basic realm="'.$realm.'"');
-        header('HTTP/1.0 401 Unauthorized');
-        die ("Not authorized");
-        exit;
-    }
-}
+include_once("lib/Security.class.php");
+\Api\Lib\Security::validateAdminUser();
 
-if ($_SERVER['REQUEST_METHOD'] !== "GET" && $_SERVER['REQUEST_METHOD'] !== "DELETE") {
+if (isset($_GET["hit"])) {
     ignore_user_abort(true);
     // buffer all upcoming output
     ob_start();
@@ -48,21 +24,21 @@ if ($_SERVER['REQUEST_METHOD'] !== "GET" && $_SERVER['REQUEST_METHOD'] !== "DELE
 }
 
 if (isset($_GET["alias"])) {
-    include_once ("models/Redirect.class.php");
-    $redirect = new Redirect($manager, $dbname);
+    include_once("models/Redirect.class.php");
+    $redirect = new Api\Models\Redirect();
     $redirect->load($_GET["alias"]);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === "PUT") {
     $rawInput = file_get_contents("php://input");
     $putData = json_decode($rawInput);
-    if(isset($_GET["hit"])) {
+    if (isset($_GET["hit"])) {
         $redirect->hit($putData);
     } else {
         $redirect->setProperties($putData);
         $redirect->save();
     }
-} else if ($_SERVER['REQUEST_METHOD'] === "DELETE") {
+} elseif ($_SERVER['REQUEST_METHOD'] === "DELETE") {
     if (isset($redirect)) {
         if ($redirect->getProperty('active')) {
             echo json_encode("deactivated");
@@ -71,10 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] === "PUT") {
         }
         $redirect->remove();
     }
-} else if ($_SERVER['REQUEST_METHOD'] === "GET") {
+} elseif ($_SERVER['REQUEST_METHOD'] === "GET") {
     if (!isset($redirect)) {
-        include_once ("models/RedirectCollection.class.php");
-        $redirects = new RedirectCollection($manager, $dbname);
+        include_once("models/RedirectCollection.class.php");
+        $redirects = new Api\Models\RedirectCollection();
         $redirects->load();
         echo json_encode($redirects->getList());
     } else {
