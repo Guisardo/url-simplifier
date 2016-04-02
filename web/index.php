@@ -1,7 +1,7 @@
 <?php
 
 // Configuration
-$dbhost = 'db';
+$dbhost = $_ENV["MONGO_HOSTNAME"];
 $dbname = 'db.redirects';
 // Connect to test database
 $manager = new MongoDB\Driver\Manager("mongodb://$dbhost");
