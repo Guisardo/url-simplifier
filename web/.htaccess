@@ -2,6 +2,11 @@ Options +FollowSymLinks
 RewriteEngine On
 RewriteRule ^admin/ - [L,NC]
 RewriteRule ^api/ - [L,NC]
+RewriteRule ^robots\.txt$ - [L,NC]
+RewriteRule ^favicon\.ico$ - [L,NC]
 
+RewriteRule ^healthcheck$ ?healthcheck [QSA]
+
+RewriteCond %{QUERY_STRING} !healthcheck
 RewriteCond %{QUERY_STRING} !alias
 RewriteRule ^(.*)$ ?alias=$1 [QSA]

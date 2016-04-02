@@ -7,10 +7,14 @@
 <meta itemprop="image" content="{{image}}" />
 <meta property="og:title" content="{{title}}" />
 <meta property="og:description" content="{{description}}" />
-<meta property="og:site_name" content="{{defaultUrl}}"/>
+<meta property="og:site_name" content="{{title}}"/>
 <meta property="og:image" content="{{image}}" />
 <meta name="twitter:title" content="{{title}}" />
 <meta name="twitter:description" content="{{description}}" />
 <meta name="twitter:image" content="{{image}}" />
 {{extraTags}}
 {{metaRedirect}}
+<body>
+<img src="{{image}}" alt="{{title}}">
+<h1>{{title}}</h1>
+<p>{{description}}</p>
