@@ -3,7 +3,7 @@
 include_once("lib/Security.class.php");
 \Api\Lib\Security::validateAdminUser();
 
-if ($_SERVER['REQUEST_METHOD'] !== "GET" && $_SERVER['REQUEST_METHOD'] !== "DELETE") {
+if (isset($_GET["hit"])) {
     ignore_user_abort(true);
     // buffer all upcoming output
     ob_start();

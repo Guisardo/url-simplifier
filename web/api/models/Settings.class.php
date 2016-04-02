@@ -1,6 +1,9 @@
 <?php
 namespace Api\Models;
 
+/**
+ * Application settings manager.
+ */
 class Settings
 {
     public function __construct($type)

@@ -1,6 +1,9 @@
 <?php
 namespace Api\Models;
 
+/**
+ * Representation of a list of redirects.
+ */
 class RedirectCollection
 {
     public function __construct()

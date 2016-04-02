@@ -1,6 +1,9 @@
 <?php
 namespace Api\Models;
 
+/**
+ * Representation of a single redirect.
+ */
 class Redirect
 {
     public function __construct()

@@ -2,7 +2,7 @@
 namespace Api\Lib;
 
 /**
-* Singleton that consolidates the security methods
+* Static class that consolidates the security methods
 */
 class Security
 {
