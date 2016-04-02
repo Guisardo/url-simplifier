@@ -1,8 +1,22 @@
 <?php
 
 include_once("api/models/Settings.class.php");
-$settings = new Api\Models\Settings('global');
-$settings->load();
+$isConnected = false;
+try {
+    $settings = new Api\Models\Settings('global');
+    $settings->load();
+    $isConnected = true;
+} catch (Exception $e) {
+    $isConnected = $e->getMessage();
+}
+
+if (isset($_GET["healthcheck"])) {
+    if ($isConnected === true) {
+        die("WORKING");
+    } else {
+        die($isConnected);
+    }
+}
 
 $defaultUrl = $settings->getProperty('defaultUrl');
 
