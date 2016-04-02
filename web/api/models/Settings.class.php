@@ -3,10 +3,11 @@ namespace Api\Models;
 
 class Settings
 {
-    public function __construct($manager, $dbname, $type)
+    public function __construct($type)
     {
-        $this->manager = $manager;
-        $this->dbname = $dbname;
+        include_once("../lib/Connection.class.php");
+        $this->manager = Lib\Connection::getManager();
+        $this->dbname = Lib\Connection::getDBName();
         $this->data = new stdClass();
         $this->data->type = $type;
     }

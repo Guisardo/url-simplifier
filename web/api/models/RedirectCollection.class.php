@@ -3,10 +3,11 @@ namespace Api\Models;
 
 class RedirectCollection
 {
-    public function __construct($manager, $dbname)
+    public function __construct()
     {
-        $this->manager = $manager;
-        $this->dbname = $dbname;
+        include_once("../lib/Connection.class.php");
+        $this->manager = Lib\Connection::getManager();
+        $this->dbname = Lib\Connection::getDBName();
         $this->list = [];
     }
     public function load()

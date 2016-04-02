@@ -1,12 +1,6 @@
 <?php
-// Configuration
-$dbhost = $_ENV["MONGO_HOSTNAME"];
-$dbname = 'db.redirects';
-// Connect to test database
-$manager = new MongoDB\Driver\Manager("mongodb://$dbhost");
-
 include_once("models/Settings.class.php");
-$security = new Api\Models\Settings($manager, $dbname, 'sec');
+$security = new Api\Models\Settings('sec');
 $security->load();
 $username = $security->getProperty('username');
 if ($username === '') {
@@ -32,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] !== "GET") {
 }
 
 include_once("models/Settings.class.php");
-$settings = new Api\Models\Settings($manager, $dbname, $_GET["type"]);
+$settings = new Api\Models\Settings($_GET["type"]);
 $settings->load();
 
 if ($_SERVER['REQUEST_METHOD']==="PUT") {

@@ -1,27 +1,21 @@
 <?php
 
-// Configuration
-$dbhost = $_ENV["MONGO_HOSTNAME"];
-$dbname = 'db.redirects';
-// Connect to test database
-$manager = new MongoDB\Driver\Manager("mongodb://$dbhost");
-
 include_once("api/models/Settings.class.php");
-$settings = new Api\Models\Settings($manager, $dbname, 'global');
+$settings = new Api\Models\Settings('global');
 $settings->load();
 
 $defaultUrl = $settings->getProperty('defaultUrl');
 
 include_once("api/models/Redirect.class.php");
 if (!isset($_GET["alias"]) || $_GET["alias"] === '') {
-    $redirect = new Api\Models\Redirect($manager, $dbname);
+    $redirect = new Api\Models\Redirect();
 }
 
 $orgQuery = '?'.$_SERVER['QUERY_STRING'];
 $orgQuery = preg_replace('/alias=.*?(?:&|$)/', '', $orgQuery);
 $orgQuery = preg_replace('/^\?$/', '', $orgQuery);
 
-$redirect = new Api\Models\Redirect($manager, $dbname);
+$redirect = new Api\Models\Redirect();
 $redirect->load($_GET["alias"]);
 
 $cid = $_COOKIE["cid"];
@@ -56,7 +50,7 @@ $data_json = json_encode([
         "cid" => $cid
     ]);
 $url = 'http://localhost/api/redirect.php?hit=me&alias='.$redirect->getProperty("alias");
-$security = new Api\Models\Settings($manager, $dbname, 'sec');
+$security = new Api\Models\Settings('sec');
 $security->load();
 $username = $security->getProperty('username');
 if ($username === null) {
@@ -80,7 +74,7 @@ curl_exec($ch);
 curl_close($ch);
 
 if ($redirect->isNew() || $redirect->isExpired()) {
-    $redirect = new Api\Models\Redirect($manager, $dbname);
+    $redirect = new Api\Models\Redirect();
 }
 if ($redirect->getProperty('method') === 'shareable') {
     $template = file_get_contents('html/shareable.html');

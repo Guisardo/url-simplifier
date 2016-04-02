@@ -1,12 +1,6 @@
 <?php
-// Configuration
-$dbhost = $_ENV["MONGO_HOSTNAME"];
-$dbname = 'db.redirects';
-// Connect to test database
-$manager = new MongoDB\Driver\Manager("mongodb://$dbhost");
-
 include_once("models/Settings.class.php");
-$security = new Api\Models\Settings($manager, $dbname, 'sec');
+$security = new Api\Models\Settings('sec');
 $security->load();
 $username = $security->getProperty('username');
 if ($username === '') {
@@ -49,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] !== "GET" && $_SERVER['REQUEST_METHOD'] !== "DELE
 
 if (isset($_GET["alias"])) {
     include_once("models/Redirect.class.php");
-    $redirect = new Api\Models\Redirect($manager, $dbname);
+    $redirect = new Api\Models\Redirect();
     $redirect->load($_GET["alias"]);
 }
 
@@ -74,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === "PUT") {
 } elseif ($_SERVER['REQUEST_METHOD'] === "GET") {
     if (!isset($redirect)) {
         include_once("models/RedirectCollection.class.php");
-        $redirects = new Api\Models\RedirectCollection($manager, $dbname);
+        $redirects = new Api\Models\RedirectCollection();
         $redirects->load();
         echo json_encode($redirects->getList());
     } else {
