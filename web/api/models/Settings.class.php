@@ -5,10 +5,10 @@ class Settings
 {
     public function __construct($type)
     {
-        include_once("../lib/Connection.class.php");
-        $this->manager = Lib\Connection::getManager();
-        $this->dbname = Lib\Connection::getDBName();
-        $this->data = new stdClass();
+        require_once(__DIR__."/../lib/Connection.class.php");
+        $this->manager = \Api\Lib\Connection::getManager();
+        $this->dbname = \Api\Lib\Connection::getDBName();
+        $this->data = new \stdClass();
         $this->data->type = $type;
     }
     public function setProperties($properties)
@@ -29,13 +29,14 @@ class Settings
     {
         $result = $this->data->$property;
         if ($property === 'password' && $result !== '' && $result !== null) {
-            return md5(trim(strtolower($result.date('d M Y'))));
+            require_once(__DIR__."/../lib/Security.class.php");
+            $result = \Api\Lib\Security::tokenizePwd($result);
         }
         return $result;
     }
     public function load()
     {
-        $q_currentredirect = new MongoDB\Driver\Query(["type" => $this->getProperty('type')]);
+        $q_currentredirect = new \MongoDB\Driver\Query(["type" => $this->getProperty('type')]);
         $cursor = $this->manager->executeQuery($this->dbname.".settings", $q_currentredirect);
         // Iterate over all matched documents
         foreach ($cursor as $document) {
@@ -48,7 +49,7 @@ class Settings
     public function save()
     {
         $result = false;
-        $this->data->modified = new MongoDB\BSON\UTCDateTime(gmmktime());
+        $this->data->modified = new \MongoDB\BSON\UTCDateTime(gmmktime());
         // Specify the search criteria and update operations (or replacement document)
         $filter = ["type" => $this->getProperty('type')];
         $newObj = ['$set' => $this->data];
@@ -63,7 +64,7 @@ class Settings
         $options = ["multi" => false, "upsert" => true];
 
         // Create a bulk write object and add our update operation
-        $bulk = new MongoDB\Driver\BulkWrite;
+        $bulk = new \MongoDB\Driver\BulkWrite;
         $bulk->update($filter, $newObj, $options);
 
         try {
@@ -72,7 +73,7 @@ class Settings
              * returned on success; otherwise, an exception is thrown. */
             $result = $this->manager->executeBulkWrite($this->dbname.".settings", $bulk, $wc);
             $this->new = false;
-        } catch (MongoDB\Driver\Exception\Exception $e) {
+        } catch (\MongoDB\Driver\Exception\Exception $e) {
             $result = $e;
         }
 

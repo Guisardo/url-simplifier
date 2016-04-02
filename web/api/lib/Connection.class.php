@@ -1,8 +1,8 @@
 <?php
-namespace Lib;
+namespace Api\Lib;
 
 /**
-* Consolidate the database connection configurations
+* Singleton that consolidates the database connection configurations
 */
 class Connection
 {
@@ -15,7 +15,7 @@ class Connection
     public static function getManager()
     {
         if (null === static::$manager) {
-            static::$manager = new MongoDB\Driver\Manager("mongodb://".$_ENV["MONGO_HOSTNAME"]);
+            static::$manager = new \MongoDB\Driver\Manager("mongodb://".$_ENV["MONGO_HOSTNAME"]);
         }
 
         return static::$manager;

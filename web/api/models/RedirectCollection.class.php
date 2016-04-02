@@ -5,14 +5,14 @@ class RedirectCollection
 {
     public function __construct()
     {
-        include_once("../lib/Connection.class.php");
-        $this->manager = Lib\Connection::getManager();
-        $this->dbname = Lib\Connection::getDBName();
+        require_once(__DIR__."/../lib/Connection.class.php");
+        $this->manager = \Api\Lib\Connection::getManager();
+        $this->dbname = \Api\Lib\Connection::getDBName();
         $this->list = [];
     }
     public function load()
     {
-        $q_currentredirect = new MongoDB\Driver\Query([]);
+        $q_currentredirect = new \MongoDB\Driver\Query([]);
         $cursor = $this->manager->executeQuery($this->dbname.".redirects", $q_currentredirect);
         // Iterate over all matched documents
         foreach ($cursor as $document) {

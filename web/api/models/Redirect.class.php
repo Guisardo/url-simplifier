@@ -5,13 +5,13 @@ class Redirect
 {
     public function __construct()
     {
-        include_once("../lib/Connection.class.php");
-        $this->manager = Lib\Connection::getManager();
-        $this->dbname = Lib\Connection::getDBName();
-        $this->data = new stdClass();
+        require_once(__DIR__."/../lib/Connection.class.php");
+        $this->manager = \Api\Lib\Connection::getManager();
+        $this->dbname = \Api\Lib\Connection::getDBName();
+        $this->data = new \stdClass();
         $this->data->created = gmmktime();
         $this->data->active = true;
-        include_once("Settings.class.php");
+        require_once("Settings.class.php");
         $settings = new Settings($manager, $dbname, 'global');
         $settings->load();
         $this->setProperties([
@@ -62,7 +62,7 @@ class Redirect
     public function load($alias)
     {
         $this->new = true;
-        $q_currentredirect = new MongoDB\Driver\Query(["alias" => $alias]);
+        $q_currentredirect = new \MongoDB\Driver\Query(["alias" => $alias]);
         $cursor = $this->manager->executeQuery($this->dbname.".redirects", $q_currentredirect);
         // Iterate over all matched documents
         foreach ($cursor as $document) {
@@ -75,8 +75,8 @@ class Redirect
     public function save()
     {
         $result = false;
-        $this->data->created = new MongoDB\BSON\UTCDateTime($this->getProperty('created'));
-        $this->data->modified = new MongoDB\BSON\UTCDateTime(gmmktime());
+        $this->data->created = new \MongoDB\BSON\UTCDateTime($this->getProperty('created'));
+        $this->data->modified = new \MongoDB\BSON\UTCDateTime(gmmktime());
         // Specify the search criteria and update operations (or replacement document)
         $filter = ["alias" => $this->getProperty('alias')];
         $newObj = ['$set' => $this->data];
@@ -91,7 +91,7 @@ class Redirect
         $options = ["multi" => false, "upsert" => true];
 
         // Create a bulk write object and add our update operation
-        $bulk = new MongoDB\Driver\BulkWrite;
+        $bulk = new \MongoDB\Driver\BulkWrite;
         $bulk->update($filter, $newObj, $options);
 
         try {
@@ -100,7 +100,7 @@ class Redirect
              * returned on success; otherwise, an exception is thrown. */
             $result = $this->manager->executeBulkWrite($this->dbname.".redirects", $bulk);
             $this->new = false;
-        } catch (MongoDB\Driver\Exception\Exception $e) {
+        } catch (\MongoDB\Driver\Exception\Exception $e) {
             $result = $e;
         }
 
@@ -111,10 +111,10 @@ class Redirect
     {
         $result = false;
         // Create a bulk write object and add our insert operation
-        $bulk = new MongoDB\Driver\BulkWrite;
+        $bulk = new \MongoDB\Driver\BulkWrite;
         $bulk->insert([
             "alias" => $this->getProperty('alias'),
-            "t" => new MongoDB\BSON\UTCDateTime($_SERVER["REQUEST_TIME"]),
+            "t" => new \MongoDB\BSON\UTCDateTime($_SERVER["REQUEST_TIME"]),
             "data" => $data
             ]);
 
@@ -123,7 +123,7 @@ class Redirect
              * write object and an optional write concern. MongoDB\Driver\WriteResult is
              * returned on success; otherwise, an exception is thrown. */
             $result = $this->manager->executeBulkWrite($this->dbname.".hits", $bulk);
-        } catch (MongoDB\Driver\Exception\Exception $e) {
+        } catch (\MongoDB\Driver\Exception\Exception $e) {
             $result = $e;
         }
 
@@ -162,7 +162,7 @@ class Redirect
                 $options = ["limit" => 1];
 
                 // Create a bulk write object and add our delete operation
-                $bulk = new MongoDB\Driver\BulkWrite;
+                $bulk = new \MongoDB\Driver\BulkWrite;
                 $bulk->delete($filter, $options);
 
                 try {
@@ -170,7 +170,7 @@ class Redirect
                      * write object and an optional write concern. MongoDB\Driver\WriteResult is
                      * returned on success; otherwise, an exception is thrown. */
                     $result = $this->manager->executeBulkWrite($this->dbname.".redirects", $bulk);
-                } catch (MongoDB\Driver\Exception\Exception $e) {
+                } catch (\MongoDB\Driver\Exception\Exception $e) {
                     $result = $e;
                 }
             }

@@ -1,4 +1,6 @@
 <?php
+
+include_once("../api/lib/Security.class.php");
 // we are the parent
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, 'http://localhost/api/redirect.php');
@@ -15,7 +17,7 @@ if ($password === null) {
 if ($username !== '' || $password !== '') {
     curl_setopt($ch, CURLOPT_VERBOSE, true);
     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-    curl_setopt($ch, CURLOPT_USERPWD, $username.":".md5(trim(strtolower($password.date('d M Y')))));
+    curl_setopt($ch, CURLOPT_USERPWD, $username.":".\Api\Lib\Security::tokenizePwd($password));
 }
 $data = curl_exec($ch);
 $header_len = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
@@ -54,7 +56,7 @@ if (isset($_GET["alias"]) || isset($_GET["settings"])) {
     if ($username !== '' || $password !== '') {
         curl_setopt($ch, CURLOPT_VERBOSE, true);
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        curl_setopt($ch, CURLOPT_USERPWD, $username.":".md5(trim(strtolower($password.date('d M Y')))));
+        curl_setopt($ch, CURLOPT_USERPWD, $username.":".\Api\Lib\Security::tokenizePwd($password));
     }
     if ($_SERVER['REQUEST_METHOD'] === "PUT") {
         $data_json = file_get_contents("php://input");

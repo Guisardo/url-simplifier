@@ -6,17 +6,15 @@ $settings->load();
 
 $defaultUrl = $settings->getProperty('defaultUrl');
 
-include_once("api/models/Redirect.class.php");
-if (!isset($_GET["alias"]) || $_GET["alias"] === '') {
-    $redirect = new Api\Models\Redirect();
-}
-
 $orgQuery = '?'.$_SERVER['QUERY_STRING'];
 $orgQuery = preg_replace('/alias=.*?(?:&|$)/', '', $orgQuery);
 $orgQuery = preg_replace('/^\?$/', '', $orgQuery);
 
+include_once("api/models/Redirect.class.php");
 $redirect = new Api\Models\Redirect();
-$redirect->load($_GET["alias"]);
+if (isset($_GET["alias"]) && $_GET["alias"] !== '') {
+    $redirect->load($_GET["alias"]);
+}
 
 $cid = $_COOKIE["cid"];
 if ($cid === null) {
@@ -113,23 +111,10 @@ if ($redirect->getProperty('method') === 'shareable') {
     echo $template;
 } else {
     $username = $redirect->getProperty('username');
-    if ($username === '') {
-        $username = null;
-    }
     $password = $redirect->getProperty('password');
-    if ($password === '') {
-        $password = null;
-    }
-    if ($username !== null || $password !== null) {
-        $realm = 'UrlShorter Realm';
-        if (($username !== null && $username !== $_SERVER['PHP_AUTH_USER'])
-            || ($password !== null && $password !== $_SERVER['PHP_AUTH_PW'])) {
-            header('WWW-Authenticate: Basic realm="'.$realm.'"');
-            header('HTTP/1.0 401 Unauthorized');
-            die("Not authorized");
-            exit;
-        }
-    }
+    include_once("api/lib/Security.class.php");
+    \Api\Lib\Security::httpBasicAuth($username, $password);
+
     if ($redirect->getProperty('method') === 'permanent') {
         header("HTTP/1.1 301 Moved Permanently");
     } elseif ($redirect->getProperty('method') === 'temporary') {
