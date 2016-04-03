@@ -15,7 +15,7 @@ class Redirect
         $this->data->created = gmmktime();
         $this->data->active = true;
         require_once("Settings.class.php");
-        $settings = new Settings($manager, $dbname, 'global');
+        $settings = new Settings('global');
         $settings->load();
         $this->setProperties([
             "method" => "shareable",
