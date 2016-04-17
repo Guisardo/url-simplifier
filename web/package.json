@@ -1,0 +1,29 @@
+{
+  "name": "url-simplifier",
+  "version": "1.0.0",
+  "description": "A fully featured url shorter. Free and open source. Dockerized to be modular and scalable.",
+  "main": "admin",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://guisardo@github.com/Guisardo/url-simplifier.git"
+  },
+  "author": "Lucas Rancez",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Guisardo/url-simplifier/issues"
+  },
+  "homepage": "https://github.com/Guisardo/url-simplifier#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.3",
+    "run-sequence": "^1.1.5"
+  },
+  "dependencies": {
+    "gulp-uglifycss": "^1.0.6"
+  }
+}

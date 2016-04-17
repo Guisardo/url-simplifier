@@ -1,12 +1,12 @@
 var hideMetadata = function() {
   $('.permanent,.temporary,.shareable').hide();
 };
-var selectMethod = function(_method) {
+var selectMethod = function(_method, label) {
   hideMetadata();
   if (typeof(_method) === 'undefined') {
     _method = 'temporary';
   }
-  $('#selectedMethod').html(_method);
+  $('#selectedMethod').html(label);
   $('.' + _method).show();
 };
 
@@ -126,7 +126,7 @@ var settings = function($scope, $rootScope, $notification) {
   };
 };
 
-var detail = function($scope, $rootScope, $notification) {
+var detail = function($scope, $rootScope, $notification, $translate) {
   $scope.new = true;
   $scope.data = {
     'method': 'temporary',
@@ -142,7 +142,9 @@ var detail = function($scope, $rootScope, $notification) {
       };
     });
   });
-  selectMethod('temporary');
+  $translate('val_method_temporary').then(function(translatation) {
+    selectMethod('temporary', translatation);
+  });
   $scope.save = function() {
     if (validateDetail($scope.data, $scope.new)) {
       $scope.data.active = true;
@@ -154,7 +156,9 @@ var detail = function($scope, $rootScope, $notification) {
           $scope.$apply(function() {
             $scope.new = true;
             $scope.data = {};
-            selectMethod('temporary');
+            $translate('val_method_temporary').then(function(translatation) {
+              selectMethod('temporary', translatation);
+            });
             $rootScope.$broadcast('reloadlist');
             $notification('Redirect saved', {
                                                 delay: 10000
@@ -166,7 +170,9 @@ var detail = function($scope, $rootScope, $notification) {
   };
   $scope.setMethod = function(_method) {
     $scope.data.method = _method;
-    selectMethod(_method);
+    $translate('val_method_' + _method).then(function(translatation) {
+      selectMethod(_method, translatation);
+    });
   };
   $scope.$on('loaddetail', function(response, alias) {
     $.ajax({
@@ -226,8 +232,18 @@ var list = function($scope, $rootScope, $notification) {
   };
 };
 
-angular.module('urlshorter', ['notification'])
-    .controller('security', security)
-    .controller('settings', settings)
-    .controller('detail', detail)
-    .controller('list', list);
+angular.module('urlshorter', ['notification', 'pascalprecht.translate'])
+    .config(['$translateProvider', function($translateProvider) {
+      $translateProvider
+          .useStaticFilesLoader({
+            prefix: '/admin/assets/js/translations/',
+            suffix: '.json'
+          })
+          .useSanitizeValueStrategy('escape')
+          .preferredLanguage('es');
+    }])
+    .controller('security', ['$scope', '$rootScope', '$notification', security])
+    .controller('settings', ['$scope', '$rootScope', '$notification', settings])
+    .controller('detail', ['$scope', '$rootScope', '$notification',
+          '$translate', detail])
+    .controller('list', ['$scope', '$rootScope', '$notification', list]);

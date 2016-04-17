@@ -13,4 +13,4 @@ services:
     ports:
      - "8072:80"
     volumes:
-     - "./web:/var/www/html"
+     - "./web/admin:/var/www/html/admin"

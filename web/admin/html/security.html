@@ -1,13 +1,9 @@
 <html><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/admin/assets/bower_components/components-font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="/admin/assets/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="/admin/assets/bower_components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="/admin/assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/admin/assets/bower_components/angular/angular.min.js"></script>
-    <script type="text/javascript" src="/admin/assets/bower_components/angular-notification/angular-notification.min.js"></script>
-    <script type="text/javascript" src="/admin/assets/js/ui.js"></script>
+    <link href="/admin/assets/css/libs.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="/admin/assets/js/libs.min.js"></script>
+    <script type="text/javascript" src="/admin/assets/js/app.min.js"></script>
   </head>
   <body ng-app="urlshorter" ng-controller="settings">
     <div class="navbar navbar-default navbar-static-top">
@@ -24,13 +20,13 @@
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li>
-              <a href="/admin/">Redirects</a>
+              <a href="/admin/" translate="menu_redirects"></a>
             </li>
             <li>
-              <a href="/admin/settings">Settings</a>
+              <a href="/admin/settings" translate="menu_settings"></a>
             </li>
             <li class="active">
-              <a href="/admin/security">Security</a>
+              <a href="/admin/security" translate="menu_security"></a>
             </li>
           </ul>
         </div>
@@ -48,34 +44,34 @@
             <form role="form" class="form-horizontal">
               <div class="form-group">
                 <div class="col-sm-4">
-                  <label for="username" class="control-label">Admin Username</label>
+                  <label for="username" class="control-label" translate="lbl_adminUsername"></label>
                 </div>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control" id="username" placeholder="Admin panel username"
+                  <input type="text" class="form-control" id="username" placeholder="{{ 'placeholder_adminUsername' | translate }}"
                   ng-model="security.username">
                 </div>
               </div>
               <div class="form-group">
                 <div class="col-sm-4">
-                  <label for="password" class="control-label">Admin Password</label>
+                  <label for="password" class="control-label" translate="lbl_adminPassword"></label>
                 </div>
                 <div class="col-sm-8">
-                  <input type="password" class="form-control" id="password" placeholder="Admin panel password"
+                  <input type="password" class="form-control" id="password" placeholder="{{ 'placeholder_adminPassword' | translate }}"
                   ng-model="security.password">
                 </div>
               </div>
               <div class="form-group">
                 <div class="col-sm-4">
-                  <label for="pwdconfirm" class="control-label">Confirm Password</label>
+                  <label for="pwdconfirm" class="control-label" translate="lbl_adminPasswordConfirm"></label>
                 </div>
                 <div class="col-sm-8">
-                  <input type="password" class="form-control" id="pwdConfirm" placeholder="Confirm your password"
+                  <input type="password" class="form-control" id="pwdConfirm" placeholder="{{ 'placeholder_adminPasswordConfirm' | translate }}"
                   ng-model="security.pwdConfirm">
                 </div>
               </div>
               <div class="form-group">
                 <div class="col-sm-12">
-                  <button class="btn btn-success pull-right" ng-click="save()">Done</button>
+                  <button class="btn btn-success pull-right" ng-click="save()" translate="btn_done"></button>
                 </div>
               </div>
             </form>

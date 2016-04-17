@@ -1,13 +1,9 @@
 <html><head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="/admin/assets/bower_components/components-font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="/admin/assets/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="/admin/assets/bower_components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="/admin/assets/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/admin/assets/bower_components/angular/angular.min.js"></script>
-    <script type="text/javascript" src="/admin/assets/bower_components/angular-notification/angular-notification.min.js"></script>
-    <script type="text/javascript" src="/admin/assets/js/ui.js"></script>
+    <link href="/admin/assets/css/libs.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="/admin/assets/js/libs.min.js"></script>
+    <script type="text/javascript" src="/admin/assets/js/app.min.js"></script>
   </head>
   <body ng-app="urlshorter" ng-controller="settings">
     <div class="navbar navbar-default navbar-static-top">
@@ -24,13 +20,13 @@
         <div class="collapse navbar-collapse" id="navbar-ex-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li>
-              <a href="/admin/">Redirects</a>
+              <a href="/admin/" translate="menu_redirects"></a>
             </li>
             <li class="active">
-              <a href="/admin/settings">Settings</a>
+              <a href="/admin/settings" translate="menu_settings"></a>
             </li>
             <li>
-              <a href="/admin/security">Security</a>
+              <a href="/admin/security" translate="menu_security"></a>
             </li>
           </ul>
         </div>
@@ -48,67 +44,67 @@
             <form role="form" class="form-horizontal">
               <div class="form-group">
                 <div class="col-sm-4">
-                  <label for="brand" class="control-label">Brand</label>
+                  <label for="brand" class="control-label" translate="lbl_brand"></label>
                 </div>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control" id="brand" placeholder="Brand"
+                  <input type="text" class="form-control" id="brand" placeholder="{{ 'placeholder_brand' | translate }}"
                   ng-model="settings.brand">
                 </div>
               </div>
               <div class="form-group">
                 <div class="col-sm-4">
-                  <label for="defaultUrl" class="control-label">Default Url</label>
+                  <label for="defaultUrl" class="control-label" translate="lbl_defaultUrl"></label>
                 </div>
                 <div class="col-sm-8">
-                  <input type="url" class="form-control" id="defaultUrl" placeholder="Your default url"
+                  <input type="url" class="form-control" id="defaultUrl" placeholder="{{ 'placeholder_defaultUrl' | translate }}"
                   ng-model="settings.defaultUrl">
                 </div>
               </div>
               <div class="form-group">
                 <div class="col-sm-4">
-                  <label for="analytics" class="control-label">Google Analytics</label>
+                  <label for="analytics" class="control-label" translate="lbl_analytics"></label>
                 </div>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control" id="analytics" placeholder="UA-#######-#"
+                  <input type="text" class="form-control" id="analytics" placeholder="{{ 'placeholder_analytics' | translate }}"
                   ng-model="settings.analytics">
                 </div>
               </div>
               <div class="form-group">
                 <div class="col-sm-4">
-                  <label for="extraTags" class="control-label">Extra Head Tags</label>
+                  <label for="extraTags" class="control-label" translate="lbl_extraTags"></label>
                 </div>
                 <div class="col-sm-8">
-                  <textarea class="form-control" placeholder="Extra Tags for shareable links. Globals rich-snippets, extra trackings, etc."
+                  <textarea class="form-control" placeholder="{{ 'placeholder_extraTags' | translate }}"
                   ng-model="settings.extraTags" id="extraTags"></textarea>
                 </div>
               </div>
               <div class="form-group shareable">
                 <div class="col-sm-4">
-                  <label for="title" class="control-label">Default Title</label>
+                  <label for="title" class="control-label" translate="lbl_defaultTitle"></label>
                 </div>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control" id="title" placeholder="Default Title" ng-model="settings.title">
+                  <input type="text" class="form-control" id="title" placeholder="{{ 'placeholder_defaultTitle' | translate }}" ng-model="settings.title">
                 </div>
               </div>
               <div class="form-group shareable">
                 <div class="col-sm-4">
-                  <label for="description" class="control-label">Description</label>
+                  <label for="description" class="control-label" translate="lbl_defaultDescription"></label>
                 </div>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control" id="description" placeholder="Default description of your link" ng-model="settings.description">
+                  <input type="text" class="form-control" id="description" placeholder="{{ 'placeholder_defaultDescription' | translate }}" ng-model="settings.description">
                 </div>
               </div>
               <div class="form-group shareable">
                 <div class="col-sm-4">
-                  <label for="image" class="control-label">Image</label>
+                  <label for="image" class="control-label" translate="lbl_defaultImage"></label>
                 </div>
                 <div class="col-sm-8">
-                  <input type="url" class="form-control" id="image" placeholder="Default url for the image" ng-model="settings.image">
+                  <input type="url" class="form-control" id="image" placeholder="{{ 'placeholder_defaultImage' | translate }}" ng-model="settings.image">
                 </div>
               </div>
               <div class="form-group">
                 <div class="col-sm-12">
-                  <button class="btn btn-success pull-right" ng-click="save()">Done</button>
+                  <button class="btn btn-success pull-right" ng-click="save()" translate="btn_done"></button>
                 </div>
               </div>
             </form>
