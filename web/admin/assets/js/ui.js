@@ -16,7 +16,8 @@ var init = (function() {
 
 var makeAlias = function(charCount) {
   var text = '';
-  var possible = '-_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var possible =
+    '-_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
   for (var i = 0; i < charCount; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -56,7 +57,8 @@ var validateDetail = function(data, isNew) {
   if (result && typeof(data.method) === 'undefined') {
     result = false;
   }
-  if (result && typeof(data.expiration) !== 'undefined' && data.expiration < 15) {
+  if (result && typeof(data.expiration) !== 'undefined' &&
+      data.expiration < 15) {
     result = false;
   }
 
@@ -98,11 +100,16 @@ var security = function($scope, $rootScope, $notification) {
   };
 };
 
-var settings = function($scope, $rootScope, $notification) {
+var settings = function($scope, $rootScope, $notification, $translate,
+    $localStorage) {
   $scope.settings = {};
   $scope.settings.brand = 'Url Simplifier';
   $scope.settings.defaultUrl = '/';
   $scope.settings.testDomain = '';
+  $scope.$storage = $localStorage.$default({
+    'lang': 'en'
+  });
+  $scope.lang = $scope.$storage.lang;
   $.ajax({
     'url': '/admin/?settings=global',
     'success': function(data) {
@@ -123,6 +130,10 @@ var settings = function($scope, $rootScope, $notification) {
                                         });
       }
     });
+  };
+  $scope.changeLang = function() {
+    $scope.$storage.lang = $scope.lang;
+    $translate.use($scope.lang);
   };
 };
 
@@ -232,18 +243,21 @@ var list = function($scope, $rootScope, $notification) {
   };
 };
 
-angular.module('urlshorter', ['notification', 'pascalprecht.translate'])
-    .config(['$translateProvider', function($translateProvider) {
-      $translateProvider
-          .useStaticFilesLoader({
-            prefix: '/admin/assets/js/translations/',
-            suffix: '.json'
-          })
-          .useSanitizeValueStrategy('escape')
-          .preferredLanguage('es');
-    }])
+angular.module('urlshorter', ['notification', 'pascalprecht.translate',
+    'ngStorage'])
+    .config(['$translateProvider', '$localStorageProvider',
+        function($translateProvider, $localStorageProvider) {
+        $translateProvider
+            .useStaticFilesLoader({
+              prefix: '/admin/assets/js/translations/',
+              suffix: '.json'
+            })
+            .useSanitizeValueStrategy('escape')
+            .preferredLanguage($localStorageProvider.get('lang') || 'en');
+      }])
     .controller('security', ['$scope', '$rootScope', '$notification', security])
-    .controller('settings', ['$scope', '$rootScope', '$notification', settings])
+    .controller('settings', ['$scope', '$rootScope', '$notification',
+        '$translate', '$localStorage', settings])
     .controller('detail', ['$scope', '$rootScope', '$notification',
-          '$translate', detail])
+        '$translate', detail])
     .controller('list', ['$scope', '$rootScope', '$notification', list]);

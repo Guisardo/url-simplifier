@@ -7,14 +7,15 @@ var uglifycss = require('gulp-uglifycss');
 var sourcemaps = require('gulp-sourcemaps');
 var runSequence = require('run-sequence');
 
-gulp.task('js', function()  {
+gulp.task('lib.js', function()  {
   return gulp.src([
     './bower_components/jquery/dist/jquery.js',
     './bower_components/bootstrap/dist/js/bootstrap.js',
     './bower_components/angular/angular.js',
     './bower_components/angular-notification/angular-notification.js',
     './bower_components/angular-translate/angular-translate.js',
-    './bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js'
+    './bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
+    './bower_components/ngstorage/ngStorage.js'
     ])
     .pipe(concat('libs.min.js'))
     .pipe(sourcemaps.init({loadMaps: true}))
@@ -22,7 +23,7 @@ gulp.task('js', function()  {
     .pipe(sourcemaps.write(''))
     .pipe(gulp.dest('./admin/assets/js'));
 });
-gulp.task('jsapp', function()  {
+gulp.task('app.js', function()  {
   return gulp.src([
     './admin/assets/js/ui.js'
     ])
@@ -32,7 +33,7 @@ gulp.task('jsapp', function()  {
     .pipe(sourcemaps.write(''))
     .pipe(gulp.dest('./admin/assets/js'));
 });
-gulp.task('css', function() {
+gulp.task('lib.css', function() {
   gulp.src([
     './bower_components/bootstrap/dist/css/bootstrap.css',
     './bower_components/components-font-awesome/css/font-awesome.css'
@@ -44,7 +45,7 @@ gulp.task('css', function() {
     }))
     .pipe(gulp.dest('./admin/assets/css'));
 });
-gulp.task('copyfonts', function() {
+gulp.task('lib.fonts', function() {
   gulp.src([
     './bower_components/components-font-awesome/fonts/*'
     ])
@@ -52,7 +53,15 @@ gulp.task('copyfonts', function() {
 });
 
 gulp.task('build', [], function() {
-  runSequence(['js', 'css', 'copyfonts'], 'jsapp');
+  runSequence(['lib.js', 'lib.css', 'lib.fonts'], 'app.js');
+});
+
+gulp.task('build.lib', [], function() {
+  runSequence('lib.js', 'lib.css', 'lib.fonts');
+});
+
+gulp.task('build.app', [], function() {
+  runSequence('app.js');
 });
 
 gulp.task('default', ['build'], function() {});

@@ -40,6 +40,7 @@
     "lbl_defaultImage": "Imagen por omisión",
     "lbl_defaultTitle": "Title por omisión",
     "lbl_extraTags": "Etiquetas de cabecera extras",
+    "lbl_lang": "Lenguaje",
     "placeholder_adminPassword": "Contraseña para el panel de administración",
     "placeholder_adminPasswordConfirm": "Confirmar contraseña",
     "placeholder_adminUsername": "Usuario para el panel de administración",

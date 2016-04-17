@@ -14,12 +14,13 @@ RUN npm install
 
 COPY gulpfile.js gulpfile.js
 COPY bower.json bower.json
-RUN bower install --allow-root && gulp build
-#RUN npm uninstall bower
-#RUN apt-get purge -y nodejs git && apt-get autoremove -y && apt-get clean all
+RUN bower install --allow-root && gulp build.lib
 
 COPY . /var/www/html/
-#WORKDIR /var/www/html
+RUN gulp build.app
+
+RUN npm uninstall
+RUN apt-get purge -y nodejs git && apt-get autoremove -y && apt-get clean all
 
 ENV MONGO_HOSTNAME mongodb
 ENV MONGO_HOSTPORT 27017

@@ -40,6 +40,7 @@
     "lbl_defaultImage": "Image",
     "lbl_defaultTitle": "Default Title",
     "lbl_extraTags": "Extra Head Tags",
+    "lbl_lang": "Language",
     "placeholder_adminPassword": "Admin panel password",
     "placeholder_adminPasswordConfirm": "Confirm your password",
     "placeholder_adminUsername": "Admin panel username",
