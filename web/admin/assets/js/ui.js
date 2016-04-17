@@ -73,7 +73,7 @@ var validateDetail = function(data, isNew) {
   return result;
 };
 
-var security = function($scope, $rootScope, $notification) {
+var security = function($scope, $rootScope, $notification, $translate) {
   $scope.security = {};
   $.ajax({
     'url': '/admin/?settings=sec',
@@ -91,9 +91,11 @@ var security = function($scope, $rootScope, $notification) {
         'method': 'PUT',
         'data': JSON.stringify($scope.security),
         'success': function() {
-          $notification('Configuration saved', {
-                                              delay: 10000
-                                          });
+          $translate('msg_saved_cfg').then(function(translation) {
+            $notification(translation, {
+                                          'delay': 10000
+                                      });
+          });
         }
       });
     }
@@ -104,7 +106,7 @@ var settings = function($scope, $rootScope, $notification, $translate,
     $localStorage) {
   $scope.settings = {};
   $scope.settings.brand = 'Url Simplifier';
-  $scope.settings.defaultUrl = '/';
+  $scope.settings.defaultUrl = location.protocol + '//' + location.host + '/';
   $scope.settings.testDomain = '';
   $scope.$storage = $localStorage.$default({
     'lang': 'en'
@@ -125,9 +127,11 @@ var settings = function($scope, $rootScope, $notification, $translate,
       'method': 'PUT',
       'data': JSON.stringify($scope.settings),
       'success': function() {
-        $notification('Settings saved', {
-                                            delay: 10000
-                                        });
+        $translate('msg_saved_settings').then(function(translation) {
+          $notification(translation, {
+                                        'delay': 10000
+                                    });
+        });
       }
     });
   };
@@ -171,9 +175,11 @@ var detail = function($scope, $rootScope, $notification, $translate) {
               selectMethod('temporary', translatation);
             });
             $rootScope.$broadcast('reloadlist');
-            $notification('Redirect saved', {
-                                                delay: 10000
-                                            });
+            $translate('msg_saved_redirect').then(function(translation) {
+              $notification(translation, {
+                                            'delay': 10000
+                                        });
+            });
           });
         }
       });
@@ -204,9 +210,11 @@ var detail = function($scope, $rootScope, $notification, $translate) {
       'success': function(data) {
         $scope.$apply(function() {
           $rootScope.$broadcast('reloadlist');
-          $notification('Redirect ' + data, {
-                                              delay: 10000
-                                          });
+          $translate('msg_' + data + '_redirect').then(function(translation) {
+            $notification(translation, {
+                                          'delay': 10000
+                                      });
+          });
         });
       }
     });
@@ -255,7 +263,8 @@ angular.module('urlshorter', ['notification', 'pascalprecht.translate',
             .useSanitizeValueStrategy('escape')
             .preferredLanguage($localStorageProvider.get('lang') || 'en');
       }])
-    .controller('security', ['$scope', '$rootScope', '$notification', security])
+    .controller('security', ['$scope', '$rootScope', '$notification',
+        '$translate', security])
     .controller('settings', ['$scope', '$rootScope', '$notification',
         '$translate', '$localStorage', settings])
     .controller('detail', ['$scope', '$rootScope', '$notification',
