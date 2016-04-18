@@ -85,6 +85,12 @@ var security = function($scope, $rootScope, $notification, $translate) {
   });
   $scope.save = function() {
     if ($scope.security.password === $scope.security.pwdConfirm) {
+      if (typeof($scope.security.username) === 'undefined') {
+        $scope.security.username = '';
+      }
+      if (typeof($scope.security.password) === 'undefined') {
+        $scope.security.password = '';
+      }
       delete $scope.security.pwdConfirm;
       $.ajax({
         'url': '/admin/?settings=sec',

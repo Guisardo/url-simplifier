@@ -16,6 +16,7 @@ class Settings
     }
     public function setProperties($properties)
     {
+        var_dump($properties);
         foreach ($properties as $key => $value) {
             if ($key != '_id') {
                 if (gettype($value) === 'object' && get_class($value) === 'MongoDB\BSON\UTCDateTime') {
@@ -31,6 +32,7 @@ class Settings
     public function getProperty($property)
     {
         $result = $this->data->$property;
+        var_dump($result);
         if ($property === 'password' && $result !== '' && $result !== null) {
             require_once(__DIR__."/../lib/Security.class.php");
             $result = \Api\Lib\Security::tokenizePwd($result);

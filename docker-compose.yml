@@ -14,3 +14,4 @@ services:
      - "8072:80"
     volumes:
      - "./web/admin:/var/www/html/admin"
+     - "./web/api:/var/www/html/api"
