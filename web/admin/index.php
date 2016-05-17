@@ -7,7 +7,7 @@ if (isset($_SERVER['HTTPS'])) {
 }
 // we are the parent
 $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $currProtocol.'localhost/api/redirect.php');
+curl_setopt($ch, CURLOPT_URL, $currProtocol.$_SERVER['HTTP_HOST'].'/api/redirect.php');
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HEADER, true);    // we want headers
 $username = $_SERVER['PHP_AUTH_USER'];
@@ -38,11 +38,11 @@ if (strpos($data_header, 'Not authorized') !== false) {
 
 if (isset($_GET["alias"]) || isset($_GET["settings"])) {
     if (isset($_GET["settings"])) {
-        $url = $currProtocol.'localhost/api/settings.php?type='.$_GET["settings"];
+        $url = $currProtocol.$_SERVER['HTTP_HOST'].'/api/settings.php?type='.$_GET["settings"];
     } elseif ($_GET["alias"] === "*") {
-        $url = $currProtocol.'localhost/api/redirect.php';
+        $url = $currProtocol.$_SERVER['HTTP_HOST'].'/api/redirect.php';
     } else {
-        $url = $currProtocol.'localhost/api/redirect.php?alias='.$_GET["alias"];
+        $url = $currProtocol.$_SERVER['HTTP_HOST'].'/api/redirect.php?alias='.$_GET["alias"];
     }
     // we are the parent
     $ch = curl_init();
