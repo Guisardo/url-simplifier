@@ -26,8 +26,6 @@ class Security
         $security->load();
         $username = $security->getProperty('username');
         $password = $security->getProperty('password');
-        var_dump($username);
-        var_dump($password);
         \Api\Lib\Security::httpBasicAuth($username, $password);
     }
     /**
