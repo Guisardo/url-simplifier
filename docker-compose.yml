@@ -12,6 +12,9 @@ services:
      - mongodb:mongodb
     ports:
      - "8072:80"
+     - "8073:443"
     volumes:
      - "./web/admin:/var/www/html/admin"
      - "./web/api:/var/www/html/api"
+     - "./config/apache2/sites-available:/etc/apache2/sites-available"
+     - "./config/apache2/ssl:/etc/apache2/ssl"

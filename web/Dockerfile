@@ -5,7 +5,7 @@ RUN echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiver
 RUN apt-get update && apt-get install -y \
         mongodb-org-tools \
         libssl-dev
-RUN pecl install mongodb && docker-php-ext-enable mongodb
+RUN pecl install mongodb zip && docker-php-ext-enable mongodb && docker-php-ext-enable zip
 
 RUN a2enmod rewrite
 
@@ -24,6 +24,9 @@ RUN gulp build.app
 
 RUN npm uninstall
 RUN apt-get purge -y nodejs git && apt-get autoremove -y && apt-get clean all
+
+RUN a2enmod ssl && a2ensite default-ssl
+EXPOSE 443
 
 ENV MONGO_HOSTNAME mongodb
 ENV MONGO_HOSTPORT 27017
