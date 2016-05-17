@@ -62,7 +62,7 @@ $data_json = json_encode([
         "tid" => $settings->getProperty('analytics'),
         "cid" => $cid
     ]);
-$url = 'http://localhost/api/redirect.php?hit=me&alias='.$redirect->getProperty("alias");
+$url = $currProtocol.'://localhost/api/redirect.php?hit=me&alias='.$redirect->getProperty("alias");
 $security = new Api\Models\Settings('sec');
 $security->load();
 $username = $security->getProperty('username');
