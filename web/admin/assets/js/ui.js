@@ -257,6 +257,50 @@ var list = function($scope, $rootScope, $notification) {
   };
 };
 
+var backup = function($scope, $rootScope, $notification, $translate) {
+  $scope.restore = function() {
+    var $fileInput = $(event.target)
+        .parents('.section').find('input[type="file"]');
+    if ($fileInput.get(0).files.length > 0) {
+      var file = $fileInput.get(0).files[0];
+      var formData = new FormData();
+      formData.append('file', file);
+
+      $.ajax({
+             'url': '/admin/?backup',
+             'type': 'POST',
+             'data': formData,
+             'processData': false,  // tell jQuery not to process the data
+             'contentType': false,  // tell jQuery not to set contentType
+             'success': function(data) {
+                $translate('msg_' + data + '_backup').then(function(translation) {
+                  $notification(translation, {
+                                                'delay': 10000
+                                            });
+                });
+              }
+      });
+    }
+  };
+  $scope.get = function() {
+    $('body, a.btn.btn-primary').css('cursor', 'progress');
+    $.ajax({
+      'url': '/admin/?backup',
+      'success': function(data) {
+        $scope.$apply(function() {
+          $('body').append($('<iframe/>')
+              .css({
+                'height': 0,
+                'width': 0
+              })
+              .attr('src', data['link']));
+          $('body, a.btn.btn-primary').css('cursor', '');
+        });
+      }
+    });
+  };
+};
+
 angular.module('urlshorter', ['notification', 'pascalprecht.translate',
     'ngStorage'])
     .config(['$translateProvider', '$localStorageProvider',
@@ -275,4 +319,6 @@ angular.module('urlshorter', ['notification', 'pascalprecht.translate',
         '$translate', '$localStorage', settings])
     .controller('detail', ['$scope', '$rootScope', '$notification',
         '$translate', detail])
-    .controller('list', ['$scope', '$rootScope', '$notification', list]);
+    .controller('list', ['$scope', '$rootScope', '$notification', list])
+    .controller('backup', ['$scope', '$rootScope', '$notification',
+        '$translate', backup]);

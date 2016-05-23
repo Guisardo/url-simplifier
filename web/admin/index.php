@@ -8,6 +8,8 @@ if (isset($_SERVER['HTTPS'])) {
 // we are the parent
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $currProtocol.$_SERVER['HTTP_HOST'].'/api/redirect.php');
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_HEADER, true);    // we want headers
 $username = $_SERVER['PHP_AUTH_USER'];
@@ -36,9 +38,11 @@ if (strpos($data_header, 'Not authorized') !== false) {
     exit;
 }
 
-if (isset($_GET["alias"]) || isset($_GET["settings"])) {
+if (isset($_GET["alias"]) || isset($_GET["settings"]) || isset($_GET["backup"])) {
     if (isset($_GET["settings"])) {
         $url = $currProtocol.$_SERVER['HTTP_HOST'].'/api/settings.php?type='.$_GET["settings"];
+    } elseif (isset($_GET["backup"])) {
+        $url = $currProtocol.$_SERVER['HTTP_HOST'].'/api/backup.php';
     } elseif ($_GET["alias"] === "*") {
         $url = $currProtocol.$_SERVER['HTTP_HOST'].'/api/redirect.php';
     } else {
@@ -47,6 +51,8 @@ if (isset($_GET["alias"]) || isset($_GET["settings"])) {
     // we are the parent
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HEADER, true);    // we want headers
     $username = $_SERVER['PHP_AUTH_USER'];
@@ -70,6 +76,20 @@ if (isset($_GET["alias"]) || isset($_GET["settings"])) {
             ));
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PUT');
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
+    } elseif ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_GET["backup"])) {
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt(
+            $ch,
+            CURLOPT_POSTFIELDS,
+            array(
+                    'file' =>
+                        curl_file_create(
+                            $_FILES['file']['tmp_name'],
+                            $_FILES['file']['type'],
+                            $_FILES['file']['name']
+                        )
+            )
+        );
     } elseif ($_SERVER['REQUEST_METHOD'] === "DELETE") {
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
     }

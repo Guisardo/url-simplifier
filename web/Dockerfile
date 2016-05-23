@@ -4,7 +4,8 @@ RUN echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiver
 
 RUN apt-get update && apt-get install -y \
         mongodb-org-tools \
-        libssl-dev
+        libssl-dev \
+        zlibc
 RUN pecl install mongodb zip && docker-php-ext-enable mongodb && docker-php-ext-enable zip
 
 RUN a2enmod rewrite

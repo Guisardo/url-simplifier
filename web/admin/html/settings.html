@@ -28,6 +28,9 @@
             <li>
               <a href="/admin/security" translate="menu_security"></a>
             </li>
+            <li>
+              <a href="/admin/backup" translate="menu_backup"></a>
+            </li>
           </ul>
         </div>
       </div>
@@ -43,70 +46,70 @@
           <div class="col-md-offset-3 col-md-6">
             <form role="form" class="form-horizontal">
               <div class="form-group">
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                   <label for="brand" class="control-label" translate="lbl_brand"></label>
                 </div>
-                <div class="col-sm-8">
+                <div class="col-sm-7">
                   <input type="text" class="form-control" id="brand" placeholder="{{ 'placeholder_brand' | translate }}"
                   ng-model="settings.brand">
                 </div>
               </div>
               <div class="form-group">
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                   <label for="defaultUrl" class="control-label" translate="lbl_defaultUrl"></label>
                 </div>
-                <div class="col-sm-8">
+                <div class="col-sm-7">
                   <input type="url" class="form-control" id="defaultUrl" placeholder="{{ 'placeholder_defaultUrl' | translate }}"
                   ng-model="settings.defaultUrl">
                 </div>
               </div>
               <div class="form-group">
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                   <label for="analytics" class="control-label" translate="lbl_analytics"></label>
                 </div>
-                <div class="col-sm-8">
+                <div class="col-sm-7">
                   <input type="text" class="form-control" id="analytics" placeholder="{{ 'placeholder_analytics' | translate }}"
                   ng-model="settings.analytics">
                 </div>
               </div>
               <div class="form-group">
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                   <label for="extraTags" class="control-label" translate="lbl_extraTags"></label>
                 </div>
-                <div class="col-sm-8">
+                <div class="col-sm-7">
                   <textarea class="form-control" placeholder="{{ 'placeholder_extraTags' | translate }}"
                   ng-model="settings.extraTags" id="extraTags"></textarea>
                 </div>
               </div>
               <div class="form-group shareable">
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                   <label for="title" class="control-label" translate="lbl_defaultTitle"></label>
                 </div>
-                <div class="col-sm-8">
+                <div class="col-sm-7">
                   <input type="text" class="form-control" id="title" placeholder="{{ 'placeholder_defaultTitle' | translate }}" ng-model="settings.title">
                 </div>
               </div>
               <div class="form-group shareable">
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                   <label for="description" class="control-label" translate="lbl_defaultDescription"></label>
                 </div>
-                <div class="col-sm-8">
+                <div class="col-sm-7">
                   <input type="text" class="form-control" id="description" placeholder="{{ 'placeholder_defaultDescription' | translate }}" ng-model="settings.description">
                 </div>
               </div>
               <div class="form-group shareable">
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                   <label for="image" class="control-label" translate="lbl_defaultImage"></label>
                 </div>
-                <div class="col-sm-8">
+                <div class="col-sm-7">
                   <input type="url" class="form-control" id="image" placeholder="{{ 'placeholder_defaultImage' | translate }}" ng-model="settings.image">
                 </div>
               </div>
               <div class="form-group shareable">
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                   <label for="lang" class="control-label" translate="lbl_lang"></label>
                 </div>
-                <div class="col-sm-8">
+                <div class="col-sm-7">
                   <select class="form-control" ng-model="lang" ng-change="changeLang()">
                     <option>en</option>
                     <option>es</option>
