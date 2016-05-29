@@ -176,7 +176,11 @@ var detail = function($scope, $rootScope, $notification, $translate) {
         'success': function() {
           $scope.$apply(function() {
             $scope.new = true;
-            $scope.data = {};
+            $scope.data = {
+              'method': 'temporary',
+              'username': '',
+              'password': ''
+            };
             $translate('val_method_temporary').then(function(translatation) {
               selectMethod('temporary', translatation);
             });
