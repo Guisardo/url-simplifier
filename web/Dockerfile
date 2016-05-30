@@ -21,7 +21,7 @@ COPY bower.json bower.json
 RUN bower install --allow-root && gulp build.lib
 
 COPY . /var/www/html/
-RUN mkdir /var/www/html/api/lib/bkp
+RUN mkdir /var/www/html/api/lib/bkp && chmod 777 -R /var/www/html/api/lib/bkp
 RUN gulp build.app
 
 RUN npm uninstall
