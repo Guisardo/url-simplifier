@@ -10,7 +10,15 @@ if (isset($_SERVER['HTTPS'])) {
     $currProtocol = 'https://';
 }
 $host = $currProtocol.$_SERVER['HTTP_HOST'];
-$templateItems = '';
+$templateItems = str_replace(
+    array(
+        '{{url}}'
+    ),
+    array(
+        $host.'/'
+    ),
+    $templateItem
+);
 
 foreach ($redirects->getList() as $redirectData) {
     include_once("api/models/Redirect.class.php");
