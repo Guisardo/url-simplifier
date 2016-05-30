@@ -86,7 +86,7 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
 curl_exec($ch);
 curl_close($ch);
 
-if ($redirect->isNew() || $redirect->isExpired()) {
+if ($redirect->isNew() || $redirect->isExpired() || $redirect->getProperty('destination') === '') {
     $redirect = new Api\Models\Redirect();
 }
 if ($redirect->getProperty('method') === 'shareable') {
