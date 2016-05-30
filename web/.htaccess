@@ -8,9 +8,11 @@ RewriteRule ^admin/ - [L,NC]
 RewriteRule ^api/ - [L,NC]
 RewriteRule ^robots\.txt$ - [L,NC]
 RewriteRule ^favicon\.ico$ - [L,NC]
+RewriteRule ^sitemap\.xml$ /sitemap.php [L]
 
 RewriteRule ^healthcheck$ ?healthcheck [QSA]
 
+RewriteCond %{REQUEST_URI} !sitemap
 RewriteCond %{QUERY_STRING} !healthcheck
 RewriteCond %{QUERY_STRING} !alias
 RewriteRule ^(.*)$ ?alias=$1 [QSA]
