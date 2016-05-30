@@ -87,7 +87,7 @@ class Backup
             $zip->addEmptyDir($dirName);
             Backup::folderToZip(__DIR__."/bkp/".\Api\Lib\Connection::getDBName(), $zip, strlen("$parentPath/"));
             $zip->close();
-            $bkpDone = array('link' => "/api/bkp/".\Api\Lib\Connection::getDBName().'.zip');
+            $bkpDone = array('link' => "/api/lib/bkp/".\Api\Lib\Connection::getDBName().'.zip');
         }
 
         return $bkpDone;
