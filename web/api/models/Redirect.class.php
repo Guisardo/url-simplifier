@@ -22,7 +22,7 @@ class Redirect
             "title" => $settings->getProperty('title'),
             "description" => $settings->getProperty('description'),
             "image" => $settings->getProperty('image'),
-            "defaultUrl" => $settings->getProperty('defaultUrl')
+            "destination" => $settings->getProperty('defaultUrl')
             ]);
     }
     public function setProperties($properties)
