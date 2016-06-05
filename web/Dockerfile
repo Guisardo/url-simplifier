@@ -27,8 +27,8 @@ RUN gulp build.app
 RUN npm uninstall
 RUN apt-get purge -y nodejs git && apt-get autoremove -y && apt-get clean all
 
-RUN a2enmod ssl && a2ensite 000-default default-ssl
-EXPOSE 443
+#RUN a2enmod ssl && a2ensite 000-default default-ssl
+#EXPOSE 443
 
 ENV MONGO_HOSTNAME mongodb
 ENV MONGO_HOSTPORT 27017
