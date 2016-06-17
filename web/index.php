@@ -62,7 +62,7 @@ $data_json = json_encode([
         "tid" => $settings->getProperty('analytics'),
         "cid" => $cid
     ]);
-$url = 'http://localhost/api/redirect.php?hit=me&alias='.$redirect->getProperty("alias");
+$url = $currProtocol.$_SERVER['HTTP_HOST'].'/api/redirect.php?hit=me&alias='.$redirect->getProperty("alias");
 $security = new Api\Models\Settings('sec');
 $security->load();
 $username = $security->getProperty('username');
@@ -86,7 +86,7 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $data_json);
 curl_exec($ch);
 curl_close($ch);
 
-if ($redirect->isNew() || $redirect->isExpired()) {
+if ($redirect->isNew() || $redirect->isExpired() || $redirect->getProperty('destination') === '') {
     $redirect = new Api\Models\Redirect();
 }
 if ($redirect->getProperty('method') === 'shareable') {

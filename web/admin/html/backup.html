@@ -25,17 +25,17 @@
             <li>
               <a href="/admin/settings" translate="menu_settings"></a>
             </li>
-            <li class="active">
+            <li>
               <a href="/admin/security" translate="menu_security"></a>
             </li>
-            <li>
+            <li class="active">
               <a href="/admin/backup" translate="menu_backup"></a>
             </li>
           </ul>
         </div>
       </div>
     </div>
-    <div class="section" ng-controller="security">
+    <div class="section" ng-controller="backup">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
@@ -43,43 +43,27 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-md-offset-3 col-md-6">
+          <div class="col-md-6 col-md-offset-3 text-center">
             <form role="form" class="form-horizontal">
               <div class="form-group">
                 <div class="col-sm-5">
-                  <label for="username" class="control-label" translate="lbl_adminUsername"></label>
+                  <label for="restoreData" class="control-label" translate="lbl_restoreBackup"></label>
                 </div>
                 <div class="col-sm-7">
-                  <input type="text" class="form-control" id="username" placeholder="{{ 'placeholder_adminUsername' | translate }}"
-                  ng-model="security.username">
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-5">
-                  <label for="password" class="control-label" translate="lbl_adminPassword"></label>
-                </div>
-                <div class="col-sm-7">
-                  <input type="password" class="form-control" id="password" placeholder="{{ 'placeholder_adminPassword' | translate }}"
-                  ng-model="security.password">
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-5">
-                  <label for="pwdconfirm" class="control-label" translate="lbl_adminPasswordConfirm"></label>
-                </div>
-                <div class="col-sm-7">
-                  <input type="password" class="form-control" id="pwdConfirm" placeholder="{{ 'placeholder_adminPasswordConfirm' | translate }}"
-                  ng-model="security.pwdConfirm">
+                  <input type="file" class="form-control" id="restoreBackup" accept="application/zip">
                 </div>
               </div>
               <div class="form-group">
                 <div class="col-sm-12">
-                  <button class="btn btn-success pull-right" ng-click="save()" translate="btn_done"></button>
+                  <button class="btn btn-success pull-right" ng-click="restore(event)" translate="btn_restore"></button>
                 </div>
               </div>
             </form>
+            <hr>
+            <a class="btn btn-primary" ng-click="get()"><i class="fa fa-fw fa-angle-double-down"></i>{{ 'placeholder_retrieveBackup' | translate }}</a>
           </div>
         </div>
       </div>
     </div>
-</body></html>
+  </body>
+</html>

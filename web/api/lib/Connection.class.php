@@ -14,7 +14,7 @@ class Connection
      */
     public static function getDBName()
     {
-        return 'db.redirects';
+        return 'redirects';
     }
     /**
      * Get the connection manager.

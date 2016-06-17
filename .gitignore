@@ -1,1 +1,8 @@
-web/admin/assets/bower_components/
+web/bower_components
+web/node_modules
+web/admin/assets/fonts
+web/admin/assets/css/libs.min.css
+web/admin/assets/js/app.min.js
+web/admin/assets/js/libs.min.js
+web/api/bkp/
+web/api/lib/bkp/

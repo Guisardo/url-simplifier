@@ -1,0 +1,31 @@
+{
+  "name": "url-simplifier",
+  "homepage": "https://github.com/Guisardo/url-simplifier",
+  "authors": [
+    "Lucas Rancez <lucas.rancez@fox.com>"
+  ],
+  "description": "A fully featured url shorter. Free and open source. Dockerized to be modular and scalable. This is an url redirection system.",
+  "main": "",
+  "moduleType": [],
+  "license": "GNU",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "resolutions": {
+    "angular": "^1.5.4"
+  },
+  "dependencies": {
+    "jquery": "^2.2.3",
+    "bootstrap": "^3.3.6",
+    "angular": "^1.5.4",
+    "angular-translate": "^2.11.0",
+    "angular-notification": "^1.1.1",
+    "components-font-awesome": "^4.5.0",
+    "angular-translate-loader-static-files": "^2.11.0",
+    "ngstorage": "^0.3.10"
+  }
+}

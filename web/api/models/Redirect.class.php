@@ -106,6 +106,7 @@ class Redirect
         } catch (\MongoDB\Driver\Exception\Exception $e) {
             $result = $e;
         }
+        $this->callHooks('save');
 
         return $result;
     }
@@ -177,8 +178,20 @@ class Redirect
                     $result = $e;
                 }
             }
+            $this->callHooks('remove');
         }
 
         return $result;
+    }
+
+    public function callHooks($action) {
+        $currProtocol = 'http://';
+        if (isset($_SERVER['HTTPS'])) {
+            $currProtocol = 'https://';
+        }
+        $host = $currProtocol.$_SERVER['HTTP_HOST'];
+
+        @file_get_contents("http://www.google.com/webmasters/sitemaps/ping?sitemap=$host/sitemap.xml");
+        @file_get_contents("http://www.bing.com/webmaster/ping.aspx?siteMap=$host/sitemap.xml");
     }
 }

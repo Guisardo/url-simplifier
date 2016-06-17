@@ -22,6 +22,18 @@ class RedirectCollection
             array_push($this->list, $document);
         }
     }
+    public function loadPublic()
+    {
+        $q_currentredirect = new \MongoDB\Driver\Query([
+            "username" => "",
+            "password" => ""
+        ]);
+        $cursor = $this->manager->executeQuery($this->dbname.".redirects", $q_currentredirect);
+        // Iterate over all matched documents
+        foreach ($cursor as $document) {
+            array_push($this->list, $document);
+        }
+    }
     public function getList()
     {
         return $this->list;

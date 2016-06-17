@@ -1,4 +1,9 @@
 Options +FollowSymLinks
 RewriteEngine On
+
+#RewriteCond %{HTTPS} !=on
+#RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 RewriteRule settings/?$ /admin/index.php?html=settings [QSA]
 RewriteRule security/?$ /admin/index.php?html=security [QSA]
+RewriteRule backup/?$ /admin/index.php?html=backup [QSA]

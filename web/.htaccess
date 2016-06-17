@@ -1,12 +1,19 @@
 Options +FollowSymLinks
 RewriteEngine On
+
+#RewriteCond %{HTTP_HOST} ropitas\.com\.ar
+#RewriteCond %{HTTPS} !=on
+#RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 RewriteRule ^admin/ - [L,NC]
 RewriteRule ^api/ - [L,NC]
 RewriteRule ^robots\.txt$ - [L,NC]
 RewriteRule ^favicon\.ico$ - [L,NC]
+RewriteRule ^sitemap\.xml$ /sitemap.php [L]
 
 RewriteRule ^healthcheck$ ?healthcheck [QSA]
 
+RewriteCond %{REQUEST_URI} !sitemap
 RewriteCond %{QUERY_STRING} !healthcheck
 RewriteCond %{QUERY_STRING} !alias
 RewriteRule ^(.*)$ ?alias=$1 [QSA]
