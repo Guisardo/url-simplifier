@@ -42,6 +42,10 @@ class Redirect
         $result = $this->data->$property;
         if ($result === null) {
             $result = '';
+        } elseif ($property === 'method' && $result === 'shareable' &&
+                !preg_match("/bot|spider|crawl|facebook/", $_SERVER["HTTP_USER_AGENT"])) {
+            // shareable is only for crawlers
+            $result = 'temporary';
         }
         return $this->data->$property;
     }

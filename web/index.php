@@ -96,12 +96,6 @@ if ($redirect->getProperty('method') === 'shareable') {
     if ($extraTags === null) {
         $extraTags = '';
     }
-    if (!preg_match("/bot|spider|crawl|facebook/", $_SERVER["HTTP_USER_AGENT"])) {
-        $metaRedirect = '<meta http-equiv="refresh" content="url=0; '.$redirect->getProperty('destination').'">
-<script type="text/javascript">
-  location.href = "'.$redirect->getProperty('destination').'";
-</script>';
-    }
     $template = str_replace(
         array(
             '{{title}}',
@@ -109,7 +103,6 @@ if ($redirect->getProperty('method') === 'shareable') {
             '{{image}}',
             '{{destination}}',
             '{{defaultUrl}}',
-            '{{metaRedirect}}',
             '{{extraTags}}'
         ),
         array(
