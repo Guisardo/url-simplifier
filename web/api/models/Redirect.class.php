@@ -55,6 +55,7 @@ class Redirect
     }
     public function isExpired()
     {
+        $this->expired = false;
         if (!$this->getProperty('active')) {
             $this->expired = true;
         } elseif (!isset($this->expired)) {

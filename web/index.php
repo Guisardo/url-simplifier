@@ -128,6 +128,6 @@ if ($redirect->getProperty('method') === 'shareable') {
     } elseif ($redirect->getProperty('method') === 'temporary') {
         header("HTTP/1.1 302 Moved Temporary");
     }
-    header("Location: ".$redirect->data->destination.$orgQuery);
+    header("Location: ".$redirect->getProperty('destination').$orgQuery);
     //var_dump($redirect->getProperty('destination').$orgQuery);
 }
