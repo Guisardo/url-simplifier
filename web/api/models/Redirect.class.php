@@ -47,7 +47,7 @@ class Redirect
             // shareable is only for crawlers
             $result = 'temporary';
         }
-        return $this->data->$property;
+        return $result;
     }
     public function isNew()
     {
